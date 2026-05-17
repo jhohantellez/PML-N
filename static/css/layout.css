@@ -49,3 +49,34 @@
   max-width:680px;
   line-height:1.8;
 }
+
+body {
+  display: flex; 
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.page-content {
+  margin-left: 280px;
+  padding: 40px;
+  width: calc(100% - 280px);
+}
+.main-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  margin-top: 24px;
+  align-items: start;
+}
+
+.left-column, .right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -93,3 +93,46 @@
   background:var(--mist);
   color:var(--forest);
 }
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid #edf2f7;
+}
+
+.section-title {
+  font-size: 1.15rem;
+  color: #2d3748;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.section-title i {
+  color: #4a5568;
+}
+
+.alert-box {
+  background-color: #fffaf0;
+  border-left: 4px solid #dd6b20;
+  padding: 16px;
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.alert-box i {
+  color: #dd6b20;
+  font-size: 1.2rem;
+  margin-top: 2px;
+}
+
+.alert-box p {
+  color: #744210;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}

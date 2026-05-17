@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Vulnerability - Data Engineering</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <i class="fa-solid fa-cloud-sun-rain"></i> <span>ML</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="/"><i class="fa-solid fa-house"></i> Home Overview</a></li>
+      <li><a href="/businessdata"><i class="fa-solid fa-briefcase"></i> 1. Business Understanding</a></li>
+      <li class="active"><a href="/dataengineering"><i class="fa-solid fa-gears"></i> 2. Data Engineering</a></li>
+      <li><a href="#"><i class="fa-solid fa-brain"></i> 3. Modeling</a></li>
+      <li><a href="#"><i class="fa-solid fa-square-poll-vertical"></i> 4. Evaluation</a></li>
+    </ul>
+  </nav>
+
+  <main class="page-content">
+
+    <header class="header">
+      <div class="header-left">
+        <span class="phase-tag">CRISP-ML // Phase 2</span>
+        <h1 class="page-title">Climate Vulnerability Data Engineering</h1>
+        <p class="page-subtitle">
+          Data preparation, cleaning, pipeline transformations, and feature engineering applied to historical disaster records for machine learning readiness.
+        </p>
+      </div>
+    </header>
+
+    <section class="card" style="margin-bottom: 24px;">
+      <h2 class="section-title"><i class="fa-solid fa-circle-info"></i> Phase Introduction</h2>
+      <div class="context-box">
+        <p><strong>Purpose of the Phase:</strong> Data Engineering operationalizes the project by preparing raw repositories for machine learning workflows. This stage transforms sparse environmental incident registers into structured, statistically consistent inputs optimized for predictive territorial classification.</p>
+      </div>
+    </section>
+
+    <div class="main-grid">
+      
+      <div class="left-column">
+        
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-database"></i> Data Selection & Isolation</h2>
+          <div class="viab-grid" style="grid-template-columns: 1fr; gap: 16px;">
+            <div class="viab-card" style="padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                <div>
+                  <h3 style="font-size: 1.05rem; color: #1a202c; font-weight: 600;">UNGRD Climate-Related Emergencies</h3>
+                  <span style="font-size: 0.8rem; color: #718096;">Source: Colombia Open Data Platform</span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <span class="badge success" style="background-color: #eff6ff; color: #1e40af;">Filtered Sub-matrix</span>
+                  <span class="badge success" style="background-color: #f3e8ff; color: #6b21a8;">CSV / API</span>
+                </div>
+              </div>
+              <p style="font-size: 0.9rem; color: #4a5568; line-height: 1.5; margin-bottom: 16px;">
+                Historical emergency records managed by the National Unit for Disaster Risk Management. The repository is programmatically filtered to strip out non-climatic events, preserving target incidents linked directly to atmospheric variations.
+              </p>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <span style="background-color: #edf2f7; color: #2d3748; font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; font-weight: 500;">Municipality ID</span>
+                <span style="background-color: #edf2f7; color: #2d3748; font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; font-weight: 500;">Department</span>
+                <span style="background-color: #edf2f7; color: #2d3748; font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; font-weight: 500;">Event Type</span>
+                <span style="background-color: #edf2f7; color: #2d3748; font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; font-weight: 500;">Timestamp</span>
+                <span style="background-color: #edf2f7; color: #2d3748; font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; font-weight: 500;">Damage Metrics</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-broom"></i> Applied Preprocessing & Data Cleaning</h2>
+          <div class="questions-wrap">
+            <div class="question-row">
+              <div class="q-num">01</div>
+              <div class="q-text"><strong>Deduplication:</strong> Identifying and purging cross-reported emergency entries to safeguard sample independence.</div>
+            </div>
+            <div class="question-row">
+              <div class="q-num">02</div>
+              <div class="q-text"><strong>Geographic Standardization:</strong> Mapping municipal strings to official national code indexes (DIVIPOLA) to correct regional name variants.</div>
+            </div>
+            <div class="question-row">
+              <div class="q-num">03</div>
+              <div class="q-text"><strong>Lexical Normalization:</strong> Resolving categorical text discrepancies stemming from legacy system encodings and miscellaneous input formats.</div>
+            </div>
+            <div class="question-row">
+              <div class="q-num">04</div>
+              <div class="q-text"><strong>Imputation & Missingness:</strong> Assessing sparsity within geographic metrics and timestamps, discarding unresolvable records.</div>
+            </div>
+            <div class="question-row">
+              <div class="q-num">05</div>
+              <div class="q-text"><strong>Temporal Parsing:</strong> Standardizing string-based date configurations into structured ISO datetime formats for seasonal analysis.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Feature Engineering & Transformation</h2>
+          <div class="components-grid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">
+            <div class="comp-card" style="min-height: auto; padding: 16px;">
+              <div class="comp-title" style="font-size: 0.95rem; margin-bottom: 6px;">Spatial Aggregation</div>
+              <div class="comp-body" style="font-size: 0.85rem;">Grouping specific incident arrays into municipal boundaries to generate regional baselines.</div>
+            </div>
+            <div class="comp-card" style="min-height: auto; padding: 16px;">
+              <div class="comp-title" style="font-size: 0.95rem; margin-bottom: 6px;">Risk Indicators</div>
+              <div class="comp-body" style="font-size: 0.85rem;">Deriving cumulative risk exposure indexes based on frequency weights and impact severities.</div>
+            </div>
+            <div class="comp-card" style="min-height: auto; padding: 16px;">
+              <div class="comp-title" style="font-size: 0.95rem; margin-bottom: 6px;">Event Categorization</div>
+              <div class="comp-body" style="font-size: 0.85rem;">Mapping irregular event descriptions into high-level meteorological hazard domains.</div>
+            </div>
+            <div class="comp-card" style="min-height: auto; padding: 16px;">
+              <div class="comp-title" style="font-size: 0.95rem; margin-bottom: 6px;">Temporal Discretization</div>
+              <div class="comp-body" style="font-size: 0.85rem;">Extracting seasonal components, quarter slices, and yearly counts to isolate cyclic variations.</div>
+            </div>
+            <div class="comp-card" style="min-height: auto; padding: 16px;">
+              <div class="comp-title" style="font-size: 0.95rem; margin-bottom: 6px;">Density Scoring</div>
+              <div class="comp-body" style="font-size: 0.85rem;">Formulating localized density parameters tracking continuous disaster recurrence limits.</div>
+            </div>
+            <div class="comp-card" style="min-height: auto; padding: 16px;">
+              <div class="comp-title" style="font-size: 0.95rem; margin-bottom: 6px;">Feature Scaling</div>
+              <div class="comp-body" style="font-size: 0.85rem;">Normalizing engineered numeric arrays to prevent distance biases in clustering algorithms.</div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="right-column">
+        
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-filter"></i> Target Hazard Scopes</h2>
+          <ul class="interactive-list">
+            <li><i class="fa-solid fa-cloud-showers-heavy"></i> Torrential Flash Floods</li>
+            <li><i class="fa-solid fa-sun"></i> Severe Extended Droughts</li>
+            <li><i class="fa-solid fa-fire"></i> Wildfires & Vegetation Fires</li>
+            <li><i class="fa-solid fa-cloud-bolt"></i> Intense Electrical Storms</li>
+            <li><i class="fa-solid fa-snowflake"></i> Localized Frost Events</li>
+            <li><i class="fa-solid fa-wind"></i> High-Velocity Wind Events</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-book"></i> Pipeline Documentation</h2>
+          <div class="feasibility-item">
+            <span class="badge success" style="background-color: #f0fdf4; color: #16a34a;">Lineage</span>
+            <p><strong>Transformation Tracking:</strong> Documenting processing thresholds and data exclusions to secure full workflow audatibility.</p>
+          </div>
+          <div class="feasibility-item">
+            <span class="badge success" style="background-color: #fdf2f8; color: #9d174d;">Reproducibility</span>
+            <p><strong>Automated Pipelines:</strong> Packaging code transformations into modular blocks to handle upcoming, live API updates seamlessly.</p>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-box-open"></i> Expected Artifacts</h2>
+          <div class="components-grid" style="grid-template-columns: 1fr; gap: 8px;">
+            <div class="comp-card" style="padding: 10px 12px; min-height: auto; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-circle-check" style="color: #10b981;"></i> <span style="font-size: 0.85rem; font-weight: 500;">Standardized Records</span>
+            </div>
+            <div class="comp-card" style="padding: 10px 12px; min-height: auto; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-circle-check" style="color: #10b981;"></i> <span style="font-size: 0.85rem; font-weight: 500;">Engineered Hazards Matrix</span>
+            </div>
+            <div class="comp-card" style="padding: 10px 12px; min-height: auto; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-circle-check" style="color: #10b981;"></i> <span style="font-size: 0.85rem; font-weight: 500;">Municipal Risk Metadata</span>
+            </div>
+            <div class="comp-card" style="padding: 10px 12px; min-height: auto; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-circle-check" style="color: #10b981;"></i> <span style="font-size: 0.85rem; font-weight: 500;">ML-Ready Analytical Arrays</span>
+            </div>
+            
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+    <footer class="footer-note card">
+      <p><strong>Phase Conclusion & Deliverables:</strong> The Data Engineering lifecycle has successfully structured, consolidated, and documented the raw UNGRD climate-emergency records. By enforcing data purity through explicit deduplication, structural text fixes, and targeted feature scaling, the system establishes a clean, mathematically stable matrix. This robust infrastructure provides the necessary baseline for executing statistical modeling operations in the next developmental sprint.</p>
+    </footer>
+
+  </main>
+
+</body>
+</html>

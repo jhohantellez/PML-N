@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Vulnerability Project - Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <i class="fa-solid fa-cloud-sun-rain"></i> <span>ML</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li class="active"><a href="/"><i class="fa-solid fa-house"></i> Home Overview</a></li>
+      <li><a href="/businessdata"><i class="fa-solid fa-briefcase"></i> 1. Business Understanding</a></li>
+      <li><a href="/dataengineering"><i class="fa-solid fa-gears"></i> 2. Data Engineering</a></li>
+      <li><a href="#"><i class="fa-solid fa-brain"></i> 3. Modeling</a></li>
+      <li><a href="#"><i class="fa-solid fa-square-poll-vertical"></i> 4. Evaluation</a></li>
+    </ul>
+  </nav>
+
+  <main class="page-content">
+
+    <header class="header">
+      <div class="header-left">
+        <span class="phase-tag">CRISP-ML Lifecycle Framework</span>
+        <h1 class="page-title">Automatic Classification of Municipalities According to Climate Vulnerability</h1>
+        <p class="page-subtitle">
+          An end-to-end Machine Learning ecosystem dedicated to analyzing, clustering, and ranking environmental emergency exposure across Colombian territories.
+        </p>
+      </div>
+    </header>
+
+    <section class="card" style="margin-bottom: 24px;">
+      <h2 class="section-title"><i class="fa-solid fa-crosshairs"></i> Core Mission</h2>
+      <div class="context-box">
+        <p><strong>Climate Risk Detection:</strong> The primary objective of this system is to extract latent territorial vulnerability patterns. By processing thousands of historical emergency event logs with specialized Machine Learning architectures, the platform scales analytical capabilities from raw datasets into predictive territorial assets.</p>
+      </div>
+    </section>
+
+    <div class="main-grid">
+      
+      <div class="left-column">
+        
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-folder-tree"></i> Project Context & Problem Domain</h2>
+          <div class="viab-grid">
+            <div class="viab-card">
+              <div class="viab-head">
+                <div class="viab-title"><i class="fa-solid fa-house-chimney-crack"></i> 01 · Environmental Emergencies</div>
+              </div>
+              <div class="viab-body">
+                Evaluates deep historical vectors for severe localized phenomena including regular flash floods, structural droughts, sudden storms, torrential flows, and intense vegetation fires over all municipal codes.
+              </div>
+            </div>
+            <div class="viab-card">
+              <div class="viab-head">
+                <div class="viab-title"><i class="fa-solid fa-landmark"></i> 02 · Open Government Infrastructure</div>
+              </div>
+              <div class="viab-body">
+                Utilizes open public datasets to retrieve standardized geographical attributes, socio-demographic baselines, and historical incident logging crucial to training robust classification models.
+              </div>
+            </div>
+          </div>
+          
+          <div class="alert-box" style="background-color: #f0fdf4; border-left-color: #16a34a;">
+            <i class="fa-solid fa-microchip" style="color: #16a34a;"></i>
+            <p style="color: #14532d;"><strong>03 · Machine Learning Engines:</strong> Advanced multi-class classification and unsupervised spatial clustering models parse incoming records to identify parallel vulnerability profiles, setting up data-driven indicators for targeted resource optimization.</p>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-route"></i> Implemented CRISP-ML Workflow</h2>
+          <div class="questions-wrap">
+            <div class="question-row" style="border-left: 3px solid #cbd5e1;">
+              <div class="q-num">01</div>
+              <div class="q-text"><strong>Business Understanding:</strong> Translating public environmental goals into explicit, quantifiable data operations and risk tiers.</div>
+            </div>
+            <div class="question-row" style="border-left: 3px solid #3b82f6;">
+              <div class="q-num">02</div>
+              <div class="q-text"><strong>Data Engineering:</strong> Constructing pipeline integrations, data parsing, geometric boundary resolution, and feature scaling.</div>
+            </div>
+            <div class="question-row" style="border-left: 3px solid #cbd5e1;">
+              <div class="q-num">03</div>
+              <div class="q-text"><strong>Modeling:</strong> Iterating over classification ensembles and anomaly detection models to optimize territorial risk indexing.</div>
+            </div>
+            <div class="question-row" style="border-left: 3px solid #cbd5e1;">
+              <div class="q-num">04</div>
+              <div class="q-text"><strong>Evaluation & Deployment:</strong> Cross-validating model accuracy against empirical damage indices and wrapping inferences into this dashboard system.</div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="right-column">
+        
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-server"></i> Active Core Dataset</h2>
+          <div class="feasibility-item">
+            <span class="badge success" style="background-color: #eff6ff; color: #1e40af;">UNGRD Source</span>
+            <p><strong>Climate-Related Emergencies:</strong> Curated matrix holding comprehensive event tracking (floods, torrential surges, electrical damage, and fires).</p>
+          </div>
+          <div class="feasibility-item">
+            <span class="badge success" style="background-color: #f3e8ff; color: #6b21a8;">Specifications</span>
+            <p><strong>Format:</strong> High-throughput Tabular CSV ingested natively through secure programmatic Open API interfaces.</p>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-layer-group"></i> Production Stack</h2>
+          <div class="components-grid" style="grid-template-columns: 1fr; gap: 10px;">
+            <div class="comp-card" style="padding: 10px 14px; display: flex; align-items: center; gap: 12px; min-height: auto;">
+              <i class="fa-brands fa-python" style="color: #3776ab; font-size: 1.2rem;"></i> <span style="font-weight: 500; font-size: 0.9rem;">Python Core</span>
+            </div>
+            <div class="comp-card" style="padding: 10px 14px; display: flex; align-items: center; gap: 12px; min-height: auto;">
+              <i class="fa-solid fa-gears" style="color: #008080; font-size: 1.2rem;"></i> <span style="font-weight: 500; font-size: 0.9rem;">Flask Backend</span>
+            </div>
+            <div class="comp-card" style="padding: 10px 14px; display: flex; align-items: center; gap: 12px; min-height: auto;">
+              <i class="fa-solid fa-table" style="color: #130654; font-size: 1.2rem;"></i> <span style="font-weight: 500; font-size: 0.9rem;">Pandas Analytics</span>
+            </div>
+            <div class="comp-card" style="padding: 10px 14px; display: flex; align-items: center; gap: 12px; min-height: auto;">
+              <i class="fa-solid fa-brain" style="color: #f8991d; font-size: 1.2rem;"></i> <span style="font-weight: 500; font-size: 0.9rem;">Scikit-Learn ML</span>
+            </div>
+            <div class="comp-card" style="padding: 10px 14px; display: flex; align-items: center; gap: 12px; min-height: auto;">
+              <i class="fa-code" style="color: #e34f26; font-size: 1.2rem;"></i> <span style="font-weight: 500; font-size: 0.9rem;">HTML5 & Modern CSS</span>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+    <footer class="footer-note card">
+      <p><strong>Strategic Architecture Vision:</strong> By leveraging open government data structures and pairing them with robust pipeline engineering, this interface provides a streamlined hub to track vulnerabilities. It serves as an integrated analytical workspace mapping out clear, data-backed insights for administrative deployment and climatic prevention structures across Colombia.</p>
+    </footer>
+
+  </main>
+
+</body>
+</html>
