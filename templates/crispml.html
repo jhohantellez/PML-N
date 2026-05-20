@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRISP-ML Methodology</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+  <nav class="sidebar">
+
+    <div class="sidebar-brand">
+      <i class="fa-solid fa-cloud-sun-rain"></i> <span>ML</span>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a href="/"><i class="fa-solid fa-house"></i> Home Overview</a></li>
+      <li class="active"><a href="/crispmlmethodology"><i class="fa-solid fa-briefcase"></i> CRISP-ML Methodology</a></li>
+      <li><a href="/businessunderstanding"><i class="fa-solid fa-briefcase"></i> 1. Business Understanding</a></li>
+      <li><a href="/dataunderstanding"><i class="fa-solid fa-database"></i> 2. Data Understanding</a></li>
+      <li><a href="/dataengineering"><i class="fa-solid fa-gears"></i> 3. Data Engineering</a></li>
+    </ul>
+
+  </nav>
+
+  <main class="page-content">
+
+    <header class="header">
+
+      <div class="header-left">
+
+        <span class="phase-tag">CRISP-ML FRAMEWORK</span>
+
+        <h1 class="page-title">CRISP-ML Methodology</h1>
+
+        <p class="page-subtitle">
+          CRISP-ML is a structured and iterative methodology designed for modern Machine Learning projects, focusing on business value, model quality, deployment, and continuous monitoring.
+        </p>
+
+      </div>
+
+    </header>
+
+    <section class="stats-grid">
+
+      <div class="stat-card">
+        <i class="fa-solid fa-diagram-project icon-blue"></i>
+        <div>
+          <h3>Methodology Type</h3>
+          <p>Iterative Lifecycle</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <i class="fa-solid fa-brain icon-green"></i>
+        <div>
+          <h3>Main Focus</h3>
+          <p>Machine Learning Projects</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <i class="fa-solid fa-gears icon-orange"></i>
+        <div>
+          <h3>Total Phases</h3>
+          <p>6 Core Stages</p>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="main-grid">
+
+      <div class="left-column">
+
+        <section class="card">
+
+          <h2 class="section-title">
+            <i class="fa-solid fa-circle-info"></i> Introduction to CRISP-ML
+          </h2>
+
+          <div class="context-box">
+
+            <p>
+              <strong>CRISP-ML</strong> (Cross Industry Standard Process for Machine Learning) is an evolution of the traditional CRISP-DM methodology specifically adapted for modern Machine Learning systems.
+            </p>
+
+            <p>
+              Unlike conventional data mining methodologies, CRISP-ML emphasizes not only model creation, but also deployment, monitoring, reproducibility, and long-term maintenance.
+            </p>
+
+            <p>
+              The methodology establishes a systematic framework that connects business objectives with technical implementation, ensuring that Machine Learning solutions generate sustainable organizational value.
+            </p>
+
+          </div>
+
+        </section>
+
+        <section class="card">
+
+          <h2 class="section-title">
+            <i class="fa-solid fa-briefcase"></i> 1. Business & Data Understanding
+          </h2>
+
+          <div class="context-box">
+
+            <p>
+              This initial phase focuses on understanding the organizational problem and translating business needs into measurable Machine Learning objectives.
+            </p>
+
+            <p>
+              It also includes preliminary data evaluation, feasibility analysis, risk identification, and the formulation of key analytical questions that the model must answer.
+            </p>
+
+          </div>
+
+          <div class="questions-wrap">
+
+            <div class="question-row">
+              <div class="q-num">01</div>
+              <div class="q-text">
+                Define business objectives and project goals.
+              </div>
+            </div>
+
+            <div class="question-row">
+              <div class="q-num">02</div>
+              <div class="q-text">
+                Evaluate available datasets and their relevance.
+              </div>
+            </div>
+
+            <div class="question-row">
+              <div class="q-num">03</div>
+              <div class="q-text">
+                Analyze risks, limitations, and technical feasibility.
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <section class="card">
+
+          <h2 class="section-title">
+            <i class="fa-solid fa-gears"></i> 2. Data Engineering
+          </h2>
+
+          <div class="context-box">
+
+            <p>
+              Data Engineering prepares datasets for Machine Learning processes through cleaning, transformation, feature generation, and normalization techniques.
+            </p>
+
+            <p>
+              During this phase, missing values, inconsistencies, and structural problems are addressed to maximize predictive quality and reduce model risks.
+            </p>
+
+          </div>
+
+          <div class="questions-wrap">
+
+            <div class="question-row">
+              <div class="q-num">01</div>
+              <div class="q-text">
+                Select and integrate relevant data sources.
+              </div>
+            </div>
+
+            <div class="question-row">
+              <div class="q-num">02</div>
+              <div class="q-text">
+                Clean datasets and handle null values.
+              </div>
+            </div>
+
+            <div class="question-row">
+              <div class="q-num">03</div>
+              <div class="q-text">
+                Transform variables and document preprocessing steps.
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+      <div class="right-column">
+
+        <section class="card question-card">
+
+          <h2 class="section-title">
+            <i class="fa-solid fa-microchip"></i> 3. Model Engineering
+          </h2>
+
+          <ul class="interactive-list">
+            <li>Select appropriate Machine Learning algorithms.</li>
+            <li>Train models using prepared datasets.</li>
+            <li>Optimize hyperparameters to improve performance.</li>
+            <li>Validate results using unseen data.</li>
+          </ul>
+
+        </section>
+
+        <section class="card feasibility-card">
+
+          <h2 class="section-title">
+            <i class="fa-solid fa-chart-line"></i> 4. Model Evaluation
+          </h2>
+
+          <div class="feasibility-item">
+            <span class="badge success">Metrics</span>
+            <p>Apply performance metrics according to classification or regression objectives.</p>
+          </div>
+
+          <div class="feasibility-item">
+            <span class="badge success">Validation</span>
+            <p>Use cross-validation techniques to evaluate generalization capacity.</p>
+          </div>
+
+          <div class="feasibility-item">
+            <span class="badge warning">Risk Analysis</span>
+            <p>Detect overfitting, underfitting, bias, or performance degradation.</p>
+          </div>
+
+        </section>
+
+        <section class="card">
+
+          <h2 class="section-title">
+            <i class="fa-solid fa-rocket"></i> 5. Deployment
+          </h2>
+
+          <div class="context-box">
+
+            <p>
+              In this stage, the validated model is integrated into a real production environment and connected with operational systems.
+            </p>
+
+            <p>
+              Documentation, user training, monitoring protocols, and incident management procedures are also established.
+            </p>
+
+          </div>
+
+        </section>
+
+        <section class="card">
+
+          <h2 class="section-title">
+            <i class="fa-solid fa-shield-heart"></i> 6. Monitoring & Maintenance
+          </h2>
+
+          <div class="context-box">
+
+            <p>
+              CRISP-ML incorporates continuous monitoring mechanisms to ensure long-term model reliability and stability.
+            </p>
+
+            <p>
+              This phase includes drift detection, periodic retraining, quality control, and adaptation to evolving business conditions.
+            </p>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </div>
+
+    <footer class="footer-note card">
+
+      <p>
+        <strong>Methodology Summary:</strong> CRISP-ML provides a structured lifecycle for developing, deploying, and maintaining Machine Learning systems. By combining business alignment, data quality assurance, engineering practices, and continuous monitoring, the methodology ensures that AI solutions remain reliable, scalable, and valuable over time.
+      </p>
+
+    </footer>
+
+  </main>
+
+</body>
+</html>

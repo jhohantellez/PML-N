@@ -1,0 +1,138 @@
+.stats-grid,
+.components-grid,
+.dims-grid,
+.viab-grid{
+  display:grid;
+  gap:14px;
+}
+
+.stats-grid{
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+}
+
+.components-grid{
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+}
+
+.dims-grid{
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+}
+
+.viab-grid{
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+}
+
+.stat-card,
+.comp-card,
+.viab-card{
+  border-radius:var(--radius-md);
+  transition:var(--transition);
+}
+
+.stat-card{
+  background:var(--forest);
+  padding:1.4rem 1.2rem;
+  position:relative;
+  overflow:hidden;
+}
+
+.stat-card:hover{
+  transform:translateY(-3px);
+}
+
+.stat-num{
+  font-family:var(--font-display);
+  font-size:2.5rem;
+  color:var(--pale);
+}
+
+.stat-label{
+  font-size:12px;
+  color:var(--mist);
+}
+
+.comp-card,
+.viab-card{
+  border:1.5px solid var(--pale);
+  background:var(--white);
+  padding:1.2rem;
+}
+
+.comp-card:hover{
+  border-color:var(--sage);
+  box-shadow:0 4px 18px rgba(123,150,105,.12);
+}
+
+.comp-title,
+.viab-title{
+  font-size:14px;
+  font-weight:500;
+  color:var(--forest);
+}
+
+.comp-body,
+.viab-body{
+  font-size:12.5px;
+  color:var(--slate);
+  line-height:1.7;
+}
+
+.tag-wrap,
+.ds-vars{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:.7rem;
+}
+
+.tag,
+.ds-var{
+  font-size:10.5px;
+  padding:3px 8px;
+  border-radius:20px;
+  background:var(--mist);
+  color:var(--forest);
+}
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid #edf2f7;
+}
+
+.section-title {
+  font-size: 1.15rem;
+  color: #2d3748;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.section-title i {
+  color: #4a5568;
+}
+
+.alert-box {
+  background-color: #fffaf0;
+  border-left: 4px solid #dd6b20;
+  padding: 16px;
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.alert-box i {
+  color: #dd6b20;
+  font-size: 1.2rem;
+  margin-top: 2px;
+}
+
+.alert-box p {
+  color: #744210;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}

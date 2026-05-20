@@ -1,0 +1,403 @@
+<!-- DATA UNDERSTANDING -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Vulnerability - Data Understanding</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <i class="fa-solid fa-cloud-sun-rain"></i> <span>ML</span>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a href="/"><i class="fa-solid fa-house"></i> Home Overview</a></li>
+      <li><a href="/crispmlmethodology"><i class="fa-solid fa-briefcase"></i> CRISP-ML Methodology</a></li>
+      <li><a href="/businessunderstanding"><i class="fa-solid fa-briefcase"></i> 1. Business Understanding</a></li>
+      <li class="active"><a href="/dataunderstanding"><i class="fa-solid fa-database"></i> 2. Data Understanding</a></li>
+      <li><a href="/dataengineering"><i class="fa-solid fa-gears"></i> 3. Data Engineering</a></li>
+    </ul>
+  </nav>
+
+  <main class="page-content">
+
+    <header class="header">
+
+      <div class="header-left">
+        <span class="phase-tag">CRISP-ML // Phase 2</span>
+
+        <h1 class="page-title">Data Understanding</h1>
+
+        <p class="page-subtitle">
+          Exploratory analysis and evaluation of climate and disaster datasets used for municipality vulnerability assessment.
+        </p>
+      </div>
+
+    </header>
+
+    <section class="stats-grid">
+
+      <div class="stat-card">
+        <i class="fa-solid fa-folder-open icon-blue"></i>
+        <div>
+          <h3>Datasets</h3>
+          <p>UNGRD + IDEAM</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <i class="fa-solid fa-table icon-green"></i>
+        <div>
+          <h3>Records</h3>
+          <p>1000+ Observations</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <i class="fa-solid fa-database icon-orange"></i>
+        <div>
+          <h3>Variable Types</h3>
+          <p>Numerical & Categorical</p>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="main-grid">
+
+      <div class="left-column">
+            <section class="card">
+            <h2 class="section-title">
+              <i class="fa-solid fa-file-lines"></i> Datasets Technical Specifications
+            </h2>
+
+            <div class="ft-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 1rem;">
+
+              <div style="border: 1px solid #dce3ec; border-radius: 10px; overflow: hidden;">
+                <div style="background: #E6F1FB; padding: 14px 18px; border-bottom: 1px solid #dce3ec;">
+                  <p style="font-weight: 600; color: #0C447C; margin: 0;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> UNGRD — Historical Emergencies
+                  </p>
+                  <p style="font-size: 12px; color: #185FA5; margin: 4px 0 0;">
+                    National Unit for Disaster Risk Management
+                  </p>
+                </div>
+                <table style="width: 100%; font-size: 13px; border-collapse: collapse; padding: 0 18px;">
+                  <tbody>
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                      <td style="padding: 10px 18px; color: #666;"><i class="fa-solid fa-calendar"></i> Period covered</td>
+                      <td style="padding: 10px 18px; text-align: right; font-weight: 500;">2000 – 2023</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                      <td style="padding: 10px 18px; color: #666;"><i class="fa-solid fa-map-pin"></i> Spatial granularity</td>
+                      <td style="padding: 10px 18px; text-align: right; font-weight: 500;">Municipal (DIVIPOLA)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                      <td style="padding: 10px 18px; color: #666;"><i class="fa-solid fa-arrows-rotate"></i> Update frequency</td>
+                      <td style="padding: 10px 18px; text-align: right; font-weight: 500;">Annual</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                      <td style="padding: 10px 18px; color: #666;"><i class="fa-solid fa-table-columns"></i> Key variables</td>
+                      <td style="padding: 10px 18px; text-align: right; font-weight: 500;">Event type, date, municipality, affected people</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 10px 18px; color: #666;"><i class="fa-solid fa-file"></i> Original format</td>
+                      <td style="padding: 10px 18px; text-align: right;">
+                        <span style="background:#B5D4F4; color:#0C447C; font-size:11px; padding: 3px 10px; border-radius: 20px; font-weight: 600;">CSV / XLSX</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <p style="font-size: 13px; color: #555; background: #f4f8ff; padding: 10px 16px; border-radius: 8px; border-left: 3px solid #378ADD; margin: 0;">
+              <i class="fa-solid fa-circle-info"></i> the dataset were obtained from the <strong>Colombia Open Data</strong> portal (datos.gov.co) 
+            </p>
+
+          </section>  
+        <section class="card">
+
+          <h2 class="section-title"><i class="fa-solid fa-database"></i> Dataset Description</h2>
+
+          <div class="viab-grid">
+
+            <div class="viab-card">
+              <div class="viab-head">
+                <div class="viab-title">
+                  <i class="fa-solid fa-triangle-exclamation"></i> UNGRD Historical Records
+                </div>
+              </div>
+
+              <div class="viab-body">
+                Historical environmental emergency records including floods, landslides, droughts, dates, municipalities, event categories, and reported impacts.
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <section class="card">
+
+          <h2 class="section-title"><i class="fa-solid fa-magnifying-glass-chart"></i> Exploratory Data Analysis</h2>
+
+          <div class="context-box">
+
+            <p>
+              Initial exploratory analysis identified significant variability in disaster frequencies across municipalities.
+            </p>
+
+            <p>
+              Temperature distributions revealed seasonal fluctuations and several outlier observations associated with extreme climate conditions.
+            </p>
+
+            <p>
+              Preliminary correlations suggest possible relationships between increasing temperature anomalies and higher environmental emergency occurrence rates.
+            </p>
+
+          </div>
+
+        </section>
+
+        <section class="card">
+
+          <h2 class="section-title"><i class="fa-solid fa-chart-column"></i> Statistical Summary</h2>
+
+          <div class="context-box">
+
+            <p>
+              Numerical variables such as temperature averages and emergency counts were analyzed using descriptive statistics including mean, standard deviation, minimum, and maximum values.
+            </p>
+
+            <p>
+              Categorical variables including municipality names and disaster types were evaluated through frequency analysis and distribution inspection.
+            </p>
+
+          </div>
+
+        </section>
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-code"></i> Core Feature Schema (UNGRD)</h2>
+          <p style="font-size: 13px; color: #666; margin-bottom: 15px;">
+            Snapshot of the primary variables identified directly from the UNGRD historical registry that will serve as inputs for the vulnerability modeling stage.
+          </p>
+          
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
+              <thead>
+                <tr style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6; color: #495057;">
+                  <th style="padding: 10px;">Feature Name</th>
+                  <th style="padding: 10px;">Data Type</th>
+                  <th style="padding: 10px;">Source</th>
+                  <th style="padding: 10px;">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid #eee;">
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">fecha</td>
+                  <td style="padding: 10px;"><span style="background: #fff3e0; color: #e65100; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Datetime</span></td>
+                  <td style="padding: 10px;">UNGRD</td>
+                  <td style="padding: 10px;">Timestamp of the emergency occurrence (parsed from string, e.g., '2019 Jan 01').</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">departamento</td>
+                  <td style="padding: 10px;"><span style="background: #e3f2fd; color: #1e88e5; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Categorical</span></td>
+                  <td style="padding: 10px;">UNGRD</td>
+                  <td style="padding: 10px;">Macro-regional state level, useful for higher-level spatial clustering.</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">divipola</td>
+                  <td style="padding: 10px;"><span style="background: #e3f2fd; color: #1e88e5; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Categorical</span></td>
+                  <td style="padding: 10px;">UNGRD</td>
+                  <td style="padding: 10px;">Unique national municipal identification code. Used as the primary key for spatial merging.</td>
+                </tr>
+                
+                <tr style="border-bottom: 1px solid #eee;">
+                  <td style="padding: 10px; font-weight: bold; color: #9c27b0;">evento</td>
+                  <td style="padding: 10px;"><span style="background: #e3f2fd; color: #1e88e5; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Categorical</span></td>
+                  <td style="padding: 10px;">UNGRD</td>
+                  <td style="padding: 10px;">Target classification of the environmental disaster (e.g., INCENDIO, INUNDACION).</td>
+                </tr>
+                
+                <tr style="border-bottom: 1px solid #eee;">
+                  <td style="padding: 10px; font-weight: bold; color: #e53935;">fallecidos</td>
+                  <td style="padding: 10px;"><span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Numerical (Int)</span></td>
+                  <td style="padding: 10px;">UNGRD</td>
+                  <td style="padding: 10px;">Number of fatalities. Critical weight metric for calculating target hazard severity.</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">personas</td>
+                  <td style="padding: 10px;"><span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Numerical (Int)</span></td>
+                  <td style="padding: 10px;">UNGRD</td>
+                  <td style="padding: 10px;">Total count of individuals directly affected by the specific emergency event.</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">familias</td>
+                  <td style="padding: 10px;"><span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Numerical (Int)</span></td>
+                  <td style="padding: 10px;">UNGRD</td>
+                  <td style="padding: 10px;">Count of affected family units, representing demographic disruption.</td>
+                </tr>
+
+                <tr style="border-bottom: 1px solid #eee;">
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">viviendas_destruidas</td>
+                  <td style="padding: 10px;"><span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Numerical (Int)</span></td>
+                  <td style="padding: 10px;">UNGRD</td>
+                  <td style="padding: 10px;">Infrastructure impact metric counting total destroyed homes.</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">viviendas_averiadas</td>
+                  <td style="padding: 10px;"><span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Numerical (Int)</span></td>
+                  <td style="padding: 10px;">UNGRD</td>
+                  <td style="padding: 10px;">Count of partially damaged homes, indicating spread of the hazard's impact.</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">hectareas</td>
+                  <td style="padding: 10px;"><span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Numerical (Float)</span></td>
+                  <td style="padding: 10px;">UNGRD</td>
+                  <td style="padding: 10px;">Environmental damage metric measuring affected land area (critical for wildfires).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <div class="right-column">
+
+        <section class="card question-card">
+
+          <h2 class="section-title"><i class="fa-solid fa-circle-check"></i> Data Quality Evaluation</h2>
+
+          <ul class="interactive-list">
+            <li>Missing values detected in meteorological station measurements.</li>
+            <li>Temporal inconsistencies identified across historical emergency records.</li>
+            <li>Several municipalities contain incomplete climate observations.</li>
+            <li>Potential duplicate entries require validation and cleaning.</li>
+          </ul>
+
+        </section>
+
+        <section class="card feasibility-card">
+
+          <h2 class="section-title"><i class="fa-solid fa-filter-circle-xmark"></i> Missing Values & Limitations</h2>
+
+          <div class="feasibility-item">
+            <span class="badge warning">Null Values</span>
+            <p>Climate datasets contain structural gaps caused by unavailable station measurements.</p>
+          </div>
+
+          <div class="feasibility-item">
+            <span class="badge warning">Spatial Coverage</span>
+            <p>Some municipalities do not contain nearby meteorological monitoring stations.</p>
+          </div>
+
+          <div class="feasibility-item">
+            <span class="badge warning">Consistency</span>
+            <p>Historical reporting standards may vary depending on region and time period.</p>
+          </div>
+
+        </section>
+
+        <section class="card">
+
+          <h2 class="section-title"><i class="fa-solid fa-chart-pie"></i> Correlation Analysis</h2>
+
+          <div class="context-box">
+
+            <p>
+              Correlation analysis was performed to evaluate relationships between climatic variables and emergency occurrence rates.
+            </p>
+
+            <p>
+              Preliminary findings indicate that temperature anomalies may contribute to increasing environmental instability in specific regions.
+            </p>
+
+          </div>
+
+        </section>
+          <section class="card">
+            <h2 class="section-title">
+              <i class="fa-solid fa-chart-pie"></i> Types of Environmental Emergencies in Colombia
+            </h2>
+
+            <div class="context-box">
+              <p>
+                Historical distribution of the main types of environmental emergencies 
+                recorded by the UNGRD across the Colombian territory.
+              </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px;">
+
+              <div style="background: #fff; border: 1px solid #dce3ec; border-radius: 10px; padding: 16px 12px; text-align: center;">
+                <i class="fa-solid fa-droplet" style="font-size: 26px; color: #185FA5; margin-bottom: 10px; display: block;"></i>
+                <p style="font-size: 13px; font-weight: 600; margin: 0 0 4px;">Floods</p>
+                <p style="font-size: 22px; font-weight: 600; color: #185FA5; margin: 0 0 4px;">43%</p>
+                <div style="height: 5px; background: #eee; border-radius: 3px; overflow: hidden; margin-top: 6px;">
+                  <div style="width: 43%; height: 100%; background: #378ADD; border-radius: 3px;"></div>
+                </div>
+                <p style="font-size: 11px; color: #888; margin: 6px 0 0;">Most frequent event</p>
+              </div>
+
+              <div style="background: #fff; border: 1px solid #dce3ec; border-radius: 10px; padding: 16px 12px; text-align: center;">
+                <i class="fa-solid fa-hill-rockslide" style="font-size: 26px; color: #633806; margin-bottom: 10px; display: block;"></i>
+                <p style="font-size: 13px; font-weight: 600; margin: 0 0 4px;">Landslides</p>
+                <p style="font-size: 22px; font-weight: 600; color: #633806; margin: 0 0 4px;">28%</p>
+                <div style="height: 5px; background: #eee; border-radius: 3px; overflow: hidden; margin-top: 6px;">
+                  <div style="width: 28%; height: 100%; background: #FAC775; border-radius: 3px;"></div>
+                </div>
+                <p style="font-size: 11px; color: #888; margin: 6px 0 0;">Andean regions</p>
+              </div>
+
+              <div style="background: #fff; border: 1px solid #dce3ec; border-radius: 10px; padding: 16px 12px; text-align: center;">
+                <i class="fa-solid fa-sun" style="font-size: 26px; color: #3B6D11; margin-bottom: 10px; display: block;"></i>
+                <p style="font-size: 13px; font-weight: 600; margin: 0 0 4px;">Droughts</p>
+                <p style="font-size: 22px; font-weight: 600; color: #3B6D11; margin: 0 0 4px;">14%</p>
+                <div style="height: 5px; background: #eee; border-radius: 3px; overflow: hidden; margin-top: 6px;">
+                  <div style="width: 14%; height: 100%; background: #97C459; border-radius: 3px;"></div>
+                </div>
+                <p style="font-size: 11px; color: #888; margin: 6px 0 0;">Arid regions</p>
+              </div>
+
+              <div style="background: #fff; border: 1px solid #dce3ec; border-radius: 10px; padding: 16px 12px; text-align: center;">
+                <i class="fa-solid fa-fire" style="font-size: 26px; color: #A32D2D; margin-bottom: 10px; display: block;"></i>
+                <p style="font-size: 13px; font-weight: 600; margin: 0 0 4px;">Fires</p>
+                <p style="font-size: 22px; font-weight: 600; color: #A32D2D; margin: 0 0 4px;">9%</p>
+                <div style="height: 5px; background: #eee; border-radius: 3px; overflow: hidden; margin-top: 6px;">
+                  <div style="width: 9%; height: 100%; background: #E24B4A; border-radius: 3px;"></div>
+                </div>
+                <p style="font-size: 11px; color: #888; margin: 6px 0 0;">Dry season</p>
+              </div>
+
+              <div style="background: #fff; border: 1px solid #dce3ec; border-radius: 10px; padding: 16px 12px; text-align: center;">
+                <i class="fa-solid fa-wind" style="font-size: 26px; color: #533AB7; margin-bottom: 10px; display: block;"></i>
+                <p style="font-size: 13px; font-weight: 600; margin: 0 0 4px;">Gales</p>
+                <p style="font-size: 22px; font-weight: 600; color: #533AB7; margin: 0 0 4px;">6%</p>
+                <div style="height: 5px; background: #eee; border-radius: 3px; overflow: hidden; margin-top: 6px;">
+                  <div style="width: 6%; height: 100%; background: #AFA9EC; border-radius: 3px;"></div>
+                </div>
+                <p style="font-size: 11px; color: #888; margin: 6px 0 0;">Wind events</p>
+              </div>
+
+            </div>
+
+          </section>
+      </div>
+    </div>  
+    <footer class="footer-note card">
+
+      <p>
+        <strong>Phase Conclusion:</strong> The Data Understanding phase provided a comprehensive overview of the available datasets, their structure, limitations, and analytical potential. Initial exploratory analysis confirmed the relevance of the selected variables for future machine learning preprocessing and modeling stages.
+      </p>
+
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,240 @@
+.project-pill{
+  background:var(--mist);
+  border:1.5px solid var(--pale);
+  border-radius:var(--radius-md);
+  padding:1rem 1.2rem;
+  max-width:260px;
+}
+
+.context-box{
+  background:var(--mist);
+  border-left:4px solid var(--sage);
+  border-radius:0 var(--radius-md) var(--radius-md) 0;
+  padding:1.3rem 1.5rem;
+  margin:2rem 0;
+}
+
+.questions-wrap,
+.datasets-wrap{
+  border:1.5px solid var(--pale);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+}
+
+.question-row{
+  display:flex;
+  gap:1rem;
+  padding:1rem 1.3rem;
+  border-bottom:1px solid var(--mist);
+}
+
+.question-row:last-child,
+.dataset-row:last-child{
+  border-bottom:none;
+}
+
+.q-num{
+  font-family:var(--font-display);
+  color:var(--sage);
+  font-size:1.2rem;
+}
+
+.q-text{
+  font-size:13.5px;
+}
+
+.risk-section{
+  background:var(--forest);
+  border-radius:var(--radius-lg);
+  padding:1.8rem;
+}
+
+.risk-row{
+  display:grid;
+  grid-template-columns:100px 1fr 90px;
+  gap:12px;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.risk-bar-bg{
+  height:8px;
+  background:rgba(255,255,255,.1);
+  border-radius:4px;
+  overflow:hidden;
+}
+
+.risk-bar{
+  height:100%;
+}
+
+.bar-muy-alto{background:#7B9669;}
+.bar-alto{background:#BAC8B1;}
+.bar-medio{background:#6C8480;}
+
+.dataset-row{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  border-bottom:1px solid var(--mist);
+}
+
+.ds-left{
+  background:var(--mist);
+  padding:1.1rem;
+  border-right:1px solid var(--pale);
+}
+
+.ds-right{
+  padding:1.1rem 1.3rem;
+}
+
+.ds-link{
+  display:inline-block;
+  margin-top:10px;
+  color:var(--sage);
+  text-decoration:none;
+}
+
+.foot-note{
+  background:#EEF2EC;
+  border-radius:var(--radius-md);
+  padding:1rem 1.2rem;
+  font-size:12.5px;
+  line-height:1.8;
+}
+.sidebar {
+  width: 280px;
+  background-color: #1a202c; 
+  color: #ffffff;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: fixed; 
+  left: 0;
+  top: 0;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
+}
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #38bdf8; 
+  padding-bottom: 24px;
+  border-bottom: 1px solid #2d3748;
+  margin-bottom: 24px;
+}
+
+
+.sidebar-menu {
+  list-style: none; 
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-menu a {
+  display: flex;
+  align-items: center;
+  gap: 14px; 
+  color: #a0aec0;
+  text-decoration: none; 
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+
+.sidebar-menu a:hover {
+  background-color: #2d3748;
+  color: #ffffff;
+}
+
+
+.sidebar-menu a i {
+  font-size: 1.1rem;
+  width: 20px; 
+  text-align: center;
+}
+
+
+.sidebar-menu li.active a {
+  background-color: #2b6cb0; 
+  color: #ffffff;
+  font-weight: 600;
+}
+.interactive-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.interactive-list li {
+  font-size: 0.9rem;
+  color: #4a5568;
+  line-height: 1.5;
+  padding: 12px;
+  background-color: #f7fafc;
+  border-radius: 8px;
+  border-left: 3px solid #4299e1;
+}
+
+
+.feasibility-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 0;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.feasibility-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.feasibility-item p {
+  font-size: 0.88rem;
+  color: #4a5568;
+  line-height: 1.4;
+}
+
+.badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge.success {
+  background-color: #e6fffa;
+  color: #234e52;
+}
+
+.badge.warning {
+  background-color: #fff5f5;
+  color: #742a2a;
+}
+
+
+.footer-note {
+  background-color: #edf2f7;
+  border-top: 4px solid #2b6cb0;
+  margin-top: 32px;
+  padding: 24px;
+}
+
+.footer-note p {
+  color: #2d3748;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}

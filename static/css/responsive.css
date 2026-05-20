@@ -1,0 +1,50 @@
+@media(max-width:900px){
+
+  .page{
+    padding:2rem 1.5rem 4rem;
+  }
+
+  .dataset-row{
+    grid-template-columns:1fr;
+  }
+
+  .ds-left{
+    border-right:none;
+    border-bottom:1px solid var(--pale);
+  }
+
+  .risk-row{
+    grid-template-columns:70px 1fr 70px;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .page{
+    padding:1.5rem 1rem 3rem;
+  }
+
+  .page-title{
+    font-size:2rem;
+  }
+
+  .project-pill{
+    width:100%;
+    max-width:100%;
+  }
+
+  .question-row{
+    flex-direction:column;
+    gap:.4rem;
+  }
+
+  .risk-row{
+    grid-template-columns:1fr;
+  }
+
+  .risk-label-val{
+    text-align:left;
+  }
+
+}
