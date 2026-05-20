@@ -1,0 +1,206 @@
+<!-- BUSINESS UNDERSTANDING -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Vulnerability - Business Understanding</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <i class="fa-solid fa-cloud-sun-rain"></i> <span>ML</span>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a href="/"><i class="fa-solid fa-house"></i> Home Overview</a></li>
+      <li><a href="/crispmlmethodology"><i class="fa-solid fa-briefcase"></i> CRISP-ML Methodology</a></li>
+      <li class="active"><a href="/businessunderstanding"><i class="fa-solid fa-briefcase"></i> 1. Business Understanding</a></li>
+      <li><a href="/dataunderstanding"><i class="fa-solid fa-database"></i> 2. Data Understanding</a></li>
+      <li><a href="/dataengineering"><i class="fa-solid fa-gears"></i> 3. Data Engineering</a></li>
+    </ul>
+  </nav>
+
+  <main class="page-content">
+
+    <header class="header">
+      <div class="header-left">
+        <span class="phase-tag">CRISP-ML // Phase 1</span>
+        <h1 class="page-title">Business Understanding</h1>
+        <p class="page-subtitle">
+          Strategic analysis of climate vulnerability challenges in Colombian municipalities and definition of machine learning objectives.
+        </p>
+      </div>
+    </header>
+
+    <section class="stats-grid">
+
+      <div class="stat-card">
+        <i class="fa-solid fa-earth-americas icon-blue"></i>
+        <div>
+          <h3>Project Domain</h3>
+          <p>Climate Risk Analytics</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <i class="fa-solid fa-map-location-dot icon-green"></i>
+        <div>
+          <h3>Scope</h3>
+          <p>Colombian Municipalities</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <i class="fa-solid fa-chart-line icon-orange"></i>
+        <div>
+          <h3>Project Goal</h3>
+          <p>Risk Classification</p>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="main-grid">
+
+      <div class="left-column">
+
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-circle-info"></i> Problem Context</h2>
+
+          <div class="context-box">
+            <p>
+              <strong>The Challenge:</strong> Climate change has intensified environmental emergencies throughout Colombia. Floods, landslides, heat waves, and droughts increasingly affect vulnerable municipalities, generating economic losses, infrastructure damage, and social instability.
+            </p>
+
+            <p>
+              <strong>The Need:</strong> Governmental and environmental organizations require analytical tools capable of identifying municipalities with high climate vulnerability in order to optimize prevention plans and resource allocation strategies.
+            </p>
+
+            <p>
+              <strong>The Proposal:</strong> This project proposes the development of a Machine Learning framework capable of automatically classifying municipalities according to historical disaster exposure and climatic behavior patterns.
+            </p>
+          </div>
+        </section>
+
+        <section class="card">
+
+          <h2 class="section-title"><i class="fa-solid fa-bullseye"></i> Business Objectives</h2>
+
+          <div class="questions-wrap">
+
+            <div class="question-row">
+              <div class="q-num">01</div>
+              <div class="q-text">
+                <strong>Automatic Vulnerability Classification:</strong> Develop a scalable ML-based system capable of categorizing municipalities into climate vulnerability levels.
+              </div>
+            </div>
+
+            <div class="question-row">
+              <div class="q-num">02</div>
+              <div class="q-text">
+                <strong>Climate Pattern Detection:</strong> Identify relationships between air temperature anomalies and environmental emergency occurrences.
+              </div>
+            </div>
+
+            <div class="question-row">
+              <div class="q-num">03</div>
+              <div class="q-text">
+                <strong>Decision Support:</strong> Provide actionable insights to environmental institutions and territorial planning entities.
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <section class="card">
+
+          <h2 class="section-title"><i class="fa-solid fa-chart-simple"></i> Expected Impact</h2>
+
+          <div class="context-box">
+            <p>
+              The proposed system may contribute to improving environmental risk monitoring and prevention mechanisms across Colombian territories.
+            </p>
+
+            <p>
+              By leveraging historical disaster records and climate information, public organizations could prioritize high-risk municipalities more efficiently and reduce response times during emergency situations.
+            </p>
+          </div>
+
+        </section>
+
+      </div>
+
+      <div class="right-column">
+
+        <section class="card question-card">
+
+          <h2 class="section-title"><i class="fa-solid fa-clipboard-question"></i> Key Analytical Questions</h2>
+
+          <ul class="interactive-list">
+            <li>Which municipalities present the highest climate vulnerability indicators?</li>
+            <li>Can climate variables explain historical emergency behavior?</li>
+            <li>Which meteorological variables have the highest predictive relevance?</li>
+            <li>Can municipalities be grouped according to similar environmental risk profiles?</li>
+          </ul>
+
+        </section>
+
+        <section class="card feasibility-card">
+
+          <h2 class="section-title"><i class="fa-solid fa-chart-line"></i> Feasibility Analysis</h2>
+
+          <div class="feasibility-item">
+            <span class="badge success">Technical</span>
+            <p>Python ecosystem compatibility using Pandas, Scikit-Learn, GeoPandas, and Flask.</p>
+          </div>
+
+          <div class="feasibility-item">
+            <span class="badge success">Data</span>
+            <p>Availability of open governmental datasets through Colombian public data repositories.</p>
+          </div>
+
+          <div class="feasibility-item">
+            <span class="badge success">Operational</span>
+            <p>Low deployment costs and accessible infrastructure for experimentation and visualization.</p>
+          </div>
+
+        </section>
+
+        <section class="card">
+
+          <h2 class="section-title"><i class="fa-solid fa-triangle-exclamation"></i> Risks & Limitations</h2>
+
+          <div class="context-box">
+            <p>
+              Some municipalities may contain incomplete climate records or inconsistent disaster reporting frequencies.
+            </p>
+
+            <p>
+              Spatial mismatches between meteorological stations and municipal boundaries could affect model precision and require preprocessing adjustments.
+            </p>
+          </div>
+
+        </section>
+
+      </div>
+
+    </div>
+
+    <footer class="footer-note card">
+
+      <p>
+        <strong>Phase Conclusion:</strong> The Business Understanding phase established a clear alignment between climate risk management requirements and machine learning opportunities. The identified objectives, analytical questions, and technical feasibility validate the continuation toward data exploration and preprocessing stages.
+      </p>
+
+    </footer>
+
+  </main>
+
+</body>
+</html>

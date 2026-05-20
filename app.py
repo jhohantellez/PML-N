@@ -9,13 +9,21 @@ def home():
     return render_template('home.html')
 #-------------------- PAGES --------------------
 
-@app.route("/businessdata")
+@app.route("/businessunderstanding")
 def business_data():
-    return render_template('businessdata.html')
+    return render_template('businessunderstanding.html')
+
+@app.route("/dataunderstanding")
+def data_understanding():
+    return render_template('dataunderstanding.html')
 
 @app.route("/dataengineering")
 def data_engineering():
     return render_template('dataengineering.html')
+
+@app.route("/crispmlmethodology")
+def crisp_ml_methodology():
+    return render_template('crispml.html')
 
 
 
