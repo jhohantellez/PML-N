@@ -11,7 +11,7 @@ def home():
 
 @app.route("/businessunderstanding")
 def business_data():
-    return render_template('businessunderstanding.html')
+    return render_template('Businessunderstanding.html')
 
 @app.route("/dataunderstanding")
 def data_understanding():
@@ -19,7 +19,7 @@ def data_understanding():
 
 @app.route("/dataengineering")
 def data_engineering():
-    return render_template('dataengineering.html')
+    return render_template('DataEngineering.html')
 
 @app.route("/crispmlmethodology")
 def crisp_ml_methodology():
