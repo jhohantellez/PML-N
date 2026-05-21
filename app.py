@@ -24,9 +24,7 @@ def data_engineering():
 @app.route("/crispmlmethodology")
 def crisp_ml_methodology():
     return render_template('crispml.html')
+if __name__ == "__main__":    app.run(debug=True)
 
 
 
-    #-------------------- RUN --------------------
-    if __name__ == "__main__":
-        app.run(debug=True)
