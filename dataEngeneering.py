@@ -141,21 +141,9 @@ df_scaled[scale_cols] = scaler.fit_transform(
 df = df.round(2)
 
 df_scaled = df_scaled.round(2)
-
-print(df.head())
-
-print(df.info())
-
-print(df['VULNERABILITY_LEVEL'].value_counts())
-
 zero_percentage = (df == 0).mean() * 100
-
 print(
     zero_percentage.sort_values(ascending=False)
 )
-
 df.to_excel('UNGRD_Cleaned.xlsx', index=False)
-
 df_scaled.to_excel('UNGRD_Scaled.xlsx', index=False)
-
-print("Datasets ready for Machine Learning")
