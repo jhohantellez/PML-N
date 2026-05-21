@@ -6,7 +6,7 @@ app = Flask(__name__)
 #-------------------- HOME --------------------
 @app.route("/")
 def home():
-    return render_template('home.html')
+    return render_template('Home.html')
 #-------------------- PAGES --------------------
 
 @app.route("/businessunderstanding")
@@ -24,9 +24,7 @@ def data_engineering():
 @app.route("/crispmlmethodology")
 def crisp_ml_methodology():
     return render_template('crispml.html')
+if __name__ == "__main__":    app.run(debug=True)
 
 
 
-    #-------------------- RUN --------------------
-    if __name__ == "__main__":
-        app.run(debug=True)
