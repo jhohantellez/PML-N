@@ -201,64 +201,64 @@
               </thead>
               <tbody>
                 <tr style="border-bottom: 1px solid #eee;">
-                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">fecha</td>
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">Date</td>
                   <td style="padding: 10px;"><span style="background: #fff3e0; color: #e65100; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Datetime</span></td>
                   <td style="padding: 10px;">UNGRD</td>
                   <td style="padding: 10px;">Timestamp of the emergency occurrence (parsed from string, e.g., '2019 Jan 01').</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #eee;">
-                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">departamento</td>
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">Department</td>
                   <td style="padding: 10px;"><span style="background: #e3f2fd; color: #1e88e5; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Categorical</span></td>
                   <td style="padding: 10px;">UNGRD</td>
                   <td style="padding: 10px;">Macro-regional state level, useful for higher-level spatial clustering.</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #eee;">
-                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">divipola</td>
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">Divipola</td>
                   <td style="padding: 10px;"><span style="background: #e3f2fd; color: #1e88e5; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Categorical</span></td>
                   <td style="padding: 10px;">UNGRD</td>
                   <td style="padding: 10px;">Unique national municipal identification code. Used as the primary key for spatial merging.</td>
                 </tr>
                 
                 <tr style="border-bottom: 1px solid #eee;">
-                  <td style="padding: 10px; font-weight: bold; color: #9c27b0;">evento</td>
+                  <td style="padding: 10px; font-weight: bold; color: #9c27b0;">Event</td>
                   <td style="padding: 10px;"><span style="background: #e3f2fd; color: #1e88e5; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Categorical</span></td>
                   <td style="padding: 10px;">UNGRD</td>
                   <td style="padding: 10px;">Target classification of the environmental disaster (e.g., INCENDIO, INUNDACION).</td>
                 </tr>
                 
                 <tr style="border-bottom: 1px solid #eee;">
-                  <td style="padding: 10px; font-weight: bold; color: #e53935;">fallecidos</td>
+                  <td style="padding: 10px; font-weight: bold; color: #e53935;">Fatalities</td>
                   <td style="padding: 10px;"><span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Numerical (Int)</span></td>
                   <td style="padding: 10px;">UNGRD</td>
                   <td style="padding: 10px;">Number of fatalities. Critical weight metric for calculating target hazard severity.</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #eee;">
-                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">personas</td>
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">People</td>
                   <td style="padding: 10px;"><span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Numerical (Int)</span></td>
                   <td style="padding: 10px;">UNGRD</td>
                   <td style="padding: 10px;">Total count of individuals directly affected by the specific emergency event.</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #eee;">
-                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">familias</td>
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">Families</td>
                   <td style="padding: 10px;"><span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Numerical (Int)</span></td>
                   <td style="padding: 10px;">UNGRD</td>
                   <td style="padding: 10px;">Count of affected family units, representing demographic disruption.</td>
                 </tr>
 
                 <tr style="border-bottom: 1px solid #eee;">
-                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">viviendas_destruidas</td>
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">Destroyed homes</td>
                   <td style="padding: 10px;"><span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Numerical (Int)</span></td>
                   <td style="padding: 10px;">UNGRD</td>
                   <td style="padding: 10px;">Infrastructure impact metric counting total destroyed homes.</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #eee;">
-                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">viviendas_averiadas</td>
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">Damaged homes</td>
                   <td style="padding: 10px;"><span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Numerical (Int)</span></td>
                   <td style="padding: 10px;">UNGRD</td>
                   <td style="padding: 10px;">Count of partially damaged homes, indicating spread of the hazard's impact.</td>
                 </tr>
                 <tr>
-                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">hectareas</td>
+                  <td style="padding: 10px; font-weight: bold; color: #1e88e5;">Hectareas</td>
                   <td style="padding: 10px;"><span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Numerical (Float)</span></td>
                   <td style="padding: 10px;">UNGRD</td>
                   <td style="padding: 10px;">Environmental damage metric measuring affected land area (critical for wildfires).</td>
