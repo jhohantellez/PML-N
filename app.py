@@ -27,6 +27,6 @@ def crisp_ml_methodology():
 
 
 
-#-------------------- RUN --------------------
-if __name__ == "__main__":
-    app.run(debug=True)
+    #-------------------- RUN --------------------
+    if __name__ == "__main__":
+        app.run(debug=True)
