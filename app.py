@@ -2,12 +2,9 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-
-#-------------------- HOME --------------------
 @app.route("/")
 def home():
     return render_template('Home.html')
-#-------------------- PAGES --------------------
 
 @app.route("/businessunderstanding")
 def business_data():
@@ -25,7 +22,13 @@ def data_engineering():
 def crisp_ml_methodology():
     return render_template('crispml.html')
 
-if __name__ == "__main__":    app.run(debug=True)
+@app.route('/LogisticRegressionConcepts', methods=['GET', 'POST'])
+def logistic_regression_concepts():
+    return render_template('LogisticRegression/LogisticRegressionConcepts.html')
 
+@app.route('/LogisticRegressionApplication', methods=['GET', 'POST'])
+def logistic_regression_application():
+    return render_template('LogisticRegression/LogisticRegressionApplication.html')
 
-
+if __name__ == "__main__":
+    app.run(debug=True)

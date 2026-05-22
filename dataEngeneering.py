@@ -109,11 +109,15 @@ df['VULNERABILITY_INDEX'] = (
     (df['EVENT_DIVERSITY'] * 0.2)
 )
 
-df['VULNERABILITY_LEVEL'] = pd.qcut(
-    df['VULNERABILITY_INDEX'],
-    q=4,
-    labels=['Low', 'Medium', 'High', 'Critical']
+p33 = df['SEVERITY_INDEX'].quantile(0.33)
+p66 = df['SEVERITY_INDEX'].quantile(0.66)
+
+df['VULNERABILITY_LEVEL'] = pd.cut(
+    df['SEVERITY_INDEX'],
+    bins=[-np.inf, p33, p66, np.inf],
+    labels=['Low', 'Medium', 'High']
 )
+
 
 encoder = LabelEncoder()
 
