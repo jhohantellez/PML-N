@@ -33,8 +33,8 @@ def crisp_ml_methodology():
 def rforest_concept():
     return render_template('Rforest/rforestconcepts.html')
 
-@app.route("/rforestapplication", methods=['GET', 'POST'])
-def rforest_application():
+@app.route("/predictionsystem", methods=['GET', 'POST'])
+def prediction_system():
     prediction = None
     if request.method == 'POST':
         dept      = request.form['department']
@@ -54,7 +54,7 @@ def rforest_application():
 
     departments = sorted(rf_le_dept.classes_.tolist())
     events      = sorted(rf_le_event.classes_.tolist())
-    return render_template('Rforest/rforestapplication.html',
+    return render_template('predictionsystem.html',
                            prediction=prediction,
                            departments=departments,
                            events=events)
@@ -112,9 +112,9 @@ def evaluation_model():
 def logistic_regression_application():
     return render_template('LogisticRegression/LogisticRegressionApplication.html')
 
-@app.route('/predictionsystem', methods=['GET', 'POST'])
-def prediction_system():
-    return render_template('predictionsystem.html')
+@app.route('/rforestapplication', methods=['GET', 'POST'])
+def rforest_application():
+    return render_template('Rforest/rforestapplication.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model Assessment — K-Means</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+
+    /* ── TAB SYSTEM ─────────────────────────────────────── */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      border: 1.5px solid var(--pale);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: .85rem 1rem;
+      background: var(--white);
+      border: none;
+      border-right: 1.5px solid var(--pale);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--slate);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+    }
+
+    .tab-btn:last-child { border-right: none; }
+
+    .tab-btn:hover {
+      background: var(--mist);
+      color: var(--forest);
+    }
+
+    .tab-btn.active {
+      background: var(--forest);
+      color: var(--pale);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── METRIC CARDS ────────────────────────────────────── */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 1rem;
+    }
+
+    .metric-card {
+      background: var(--white);
+      border: 1.5px solid var(--pale);
+      border-radius: var(--radius-md);
+      padding: 1.4rem;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--sage);
+    }
+
+    .metric-card:hover {
+      border-color: var(--sage);
+      box-shadow: 0 4px 18px rgba(123,150,105,.12);
+      transform: translateY(-2px);
+    }
+
+    .metric-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: .8rem;
+    }
+
+    .metric-name {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--forest);
+      line-height: 1.2;
+    }
+
+    .metric-tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: var(--mist);
+      color: var(--slate);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      white-space: nowrap;
+    }
+
+    .metric-formula {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: var(--sage);
+      background: var(--mist);
+      border-radius: var(--radius-sm);
+      padding: .5rem .8rem;
+      margin: .7rem 0;
+    }
+
+    .metric-desc {
+      font-size: 12.5px;
+      color: var(--slate);
+      line-height: 1.75;
+    }
+
+    .metric-range {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-top: .8rem;
+      font-size: 11.5px;
+      color: var(--slate);
+    }
+
+    .range-bar {
+      flex: 1;
+      height: 5px;
+      background: var(--mist);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .range-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--pale), var(--sage));
+      border-radius: 3px;
+    }
+
+    /* ── FORMULA HIGHLIGHT BOX ───────────────────────────── */
+    .formula-box {
+      background: var(--forest);
+      color: var(--pale);
+      border-radius: var(--radius-md);
+      padding: 1.3rem 1.6rem;
+      font-family: 'Courier New', monospace;
+      font-size: 13.5px;
+      margin: 1rem 0;
+      line-height: 2;
+    }
+
+    .formula-comment {
+      font-family: var(--font-body);
+      font-size: 11px;
+      color: var(--sage);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: .5rem;
+    }
+
+    /* ── CONFUSION MATRIX ────────────────────────────────── */
+    .matrix-wrap {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .matrix-table-wrap {
+      flex: 0 0 auto;
+    }
+
+    .matrix-table {
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .matrix-table th {
+      padding: .6rem 1.2rem;
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--slate);
+    }
+
+    .matrix-table td {
+      width: 90px;
+      height: 70px;
+      text-align: center;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .cell-tp { background: rgba(123,150,105,.25); color: #3a5c30; }
+    .cell-fp { background: rgba(108,132,128,.15); color: #3d5854; }
+    .cell-fn { background: rgba(108,132,128,.15); color: #3d5854; }
+    .cell-tn { background: rgba(123,150,105,.25); color: #3a5c30; }
+
+    .cell-label {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .matrix-legend {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: flex-start;
+      gap: .8rem;
+      padding: .7rem 0;
+      border-bottom: 1px solid var(--mist);
+    }
+
+    .legend-item:last-child { border-bottom: none; }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .legend-text { font-size: 12.5px; color: var(--slate); line-height: 1.6; }
+    .legend-label { font-weight: 600; color: var(--forest); }
+
+    /* ── ROC CURVE SVG ───────────────────────────────────── */
+    .roc-wrap {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .roc-svg-wrap {
+      background: var(--mist);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      flex: 0 0 auto;
+    }
+
+    .roc-info {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    /* ── REGRESSION COMPARISON TABLE ─────────────────────── */
+    .reg-compare {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 1rem;
+    }
+
+    .reg-compare th {
+      background: var(--forest);
+      color: var(--pale);
+      padding: .8rem 1.1rem;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .06em;
+    }
+
+    .reg-compare td {
+      padding: .85rem 1.1rem;
+      border-bottom: 1px solid var(--mist);
+      color: var(--slate);
+      vertical-align: top;
+    }
+
+    .reg-compare tr:last-child td { border-bottom: none; }
+    .reg-compare tr:hover td { background: var(--mist); }
+
+    .metric-mono {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: var(--sage);
+      font-weight: 600;
+    }
+
+    .sensitivity-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .pill-high  { background: rgba(220,38,38,.1);  color: #991b1b; }
+    .pill-med   { background: rgba(234,179, 8,.1);  color: #854d0e; }
+    .pill-low   { background: rgba(34,197,94,.1);   color: #14532d; }
+
+    /* ── SCALE BARS ──────────────────────────────────────── */
+    .scale-wrap {
+      margin-top: 1.2rem;
+    }
+
+    .scale-row {
+      display: grid;
+      grid-template-columns: 90px 1fr 50px;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--slate);
+    }
+
+    .s-bar-bg {
+      height: 7px;
+      background: var(--mist);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .s-bar { height: 100%; border-radius: 4px; background: var(--sage); }
+
+    /* ── NAV BUTTONS ─────────────────────────────────────── */
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      background: var(--white);
+      color: var(--forest);
+      text-decoration: none;
+      padding: .8rem 1.6rem;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      border: 1.5px solid var(--pale);
+      transition: var(--transition);
+    }
+
+    .btn-secondary:hover { border-color: var(--sage); color: var(--sage); }
+
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <i class="fa-solid fa-cloud-sun-rain"></i> <span>ML</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="/"><i class="fa-solid fa-house"></i> Home Overview</a></li>
+      <li><a href="/crispmlmethodology"><i class="fa-solid fa-briefcase"></i> CRISP-ML Methodology</a></li>
+      <li><a href="/businessunderstanding"><i class="fa-solid fa-briefcase"></i> 1. Business Understanding</a></li>
+      <li><a href="/dataunderstanding"><i class="fa-solid fa-briefcase"></i> 2. Data Understanding</a></li>
+      <li><a href="/dataengineering"><i class="fa-solid fa-gears"></i> 3. Data Engineering</a></li>
+      <li class="active"><a href="/Kmeans/concepts"><i class="fa-solid fa-circle-nodes"></i> 4. K-Means</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="page-content">
+    <div class="page">
+
+      <!-- HEADER -->
+      <header class="header">
+        <div class="header-left">
+          <span class="phase-tag">Evaluation Phase</span>
+          <h1 class="page-title">Model<br>Assessment</h1>
+          <p class="page-subtitle">
+            A complete reference of classification and regression metrics used to evaluate
+            machine learning models — from accuracy to ROC curves and error analysis.
+          </p>
+        </div>
+        <div class="project-pill">
+          <div class="section-label">Categories</div>
+          <strong style="font-family:var(--font-display);font-size:1.1rem;color:var(--forest);">
+            Classification
+          </strong>
+          <div style="font-size:12px;color:var(--slate);margin-top:.2rem;">
+            + Regression Metrics
+          </div>
+        </div>
+      </header>
+
+      <!-- TAB BAR -->
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('classification', this)">
+          <i class="fa-solid fa-tags"></i> Classification Metrics
+        </button>
+        <button class="tab-btn" onclick="switchTab('regression', this)">
+          <i class="fa-solid fa-chart-line"></i> Regression Metrics
+        </button>
+      </div>
+
+      <!-- ════════════════════════════════════════════════
+           TAB 1 · CLASSIFICATION
+      ════════════════════════════════════════════════ -->
+      <div id="tab-classification" class="tab-panel active">
+
+        <!-- ACCURACY -->
+        <p class="section-label">Core Metrics</p>
+
+        <div class="metric-grid">
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <div class="metric-name">Accuracy</div>
+              <span class="metric-tag">Global</span>
+            </div>
+            <div class="metric-formula">Accuracy = (TP + TN) / (TP + TN + FP + FN)</div>
+            <div class="metric-desc">
+              Measures the proportion of correctly classified instances over the total. Simple and intuitive,
+              but unreliable with imbalanced datasets — a model predicting all negatives can still score high accuracy.
+            </div>
+            <div class="metric-range">
+              <span>0</span>
+              <div class="range-bar"><div class="range-fill" style="width:100%"></div></div>
+              <span>1</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <div class="metric-name">Precision</div>
+              <span class="metric-tag">Positive</span>
+            </div>
+            <div class="metric-formula">Precision = TP / (TP + FP)</div>
+            <div class="metric-desc">
+              Of all instances predicted as positive, what fraction actually were positive?
+              High precision means fewer false alarms. Critical when the cost of a False Positive is high
+              (e.g. flagging a safe municipality as high-risk).
+            </div>
+            <div class="metric-range">
+              <span>0</span>
+              <div class="range-bar"><div class="range-fill" style="width:100%"></div></div>
+              <span>1</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <div class="metric-name">Recall</div>
+              <span class="metric-tag">Sensitivity</span>
+            </div>
+            <div class="metric-formula">Recall = TP / (TP + FN)</div>
+            <div class="metric-desc">
+              Of all actual positives, what fraction did the model detect? High recall minimizes
+              False Negatives. Critical when missing a real risk is costly — e.g. not detecting a
+              high-vulnerability municipality.
+            </div>
+            <div class="metric-range">
+              <span>0</span>
+              <div class="range-bar"><div class="range-fill" style="width:100%"></div></div>
+              <span>1</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <div class="metric-name">F1-Score</div>
+              <span class="metric-tag">Harmonic Mean</span>
+            </div>
+            <div class="metric-formula">F1 = 2 × (Precision × Recall) / (Precision + Recall)</div>
+            <div class="metric-desc">
+              The harmonic mean of Precision and Recall. Balances both metrics into a single score.
+              Preferred over accuracy when classes are imbalanced. F1 = 1 is perfect, F1 = 0 is worst.
+            </div>
+            <div class="metric-range">
+              <span>0</span>
+              <div class="range-bar"><div class="range-fill" style="width:100%"></div></div>
+              <span>1</span>
+            </div>
+          </div>
+
+        </div>
+
+        <hr class="divider">
+
+        <!-- CONFUSION MATRIX -->
+        <p class="section-label">Confusion Matrix</p>
+
+        <div class="context-box">
+          A 2×2 table that maps predicted vs. actual class labels. Each cell reveals a specific
+          type of correct or incorrect prediction, making it the foundation for computing all
+          classification metrics above.
+        </div>
+
+        <div class="matrix-wrap">
+          <div class="matrix-table-wrap">
+            <table class="matrix-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th style="text-align:center;">Predicted Positive</th>
+                  <th style="text-align:center;">Predicted Negative</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Actual Positive</th>
+                  <td class="cell-tp">
+                    85
+                    <span class="cell-label">TP</span>
+                  </td>
+                  <td class="cell-fn">
+                    15
+                    <span class="cell-label">FN</span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Actual Negative</th>
+                  <td class="cell-fp">
+                    10
+                    <span class="cell-label">FP</span>
+                  </td>
+                  <td class="cell-tn">
+                    90
+                    <span class="cell-label">TN</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="font-size:11px;color:var(--slate);margin-top:.6rem;">
+              * Example values for illustration
+            </div>
+          </div>
+
+          <div class="matrix-legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background:var(--sage);"></div>
+              <div class="legend-text">
+                <span class="legend-label">TP — True Positive:</span> Model correctly predicted positive.
+                The municipality IS high-risk and was classified as high-risk.
+              </div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:var(--slate);"></div>
+              <div class="legend-text">
+                <span class="legend-label">FP — False Positive:</span> Model wrongly predicted positive.
+                Municipality is safe but flagged as high-risk. (Type I Error)
+              </div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:var(--slate);"></div>
+              <div class="legend-text">
+                <span class="legend-label">FN — False Negative:</span> Model missed a real positive.
+                High-risk municipality classified as safe. (Type II Error)
+              </div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:var(--sage);"></div>
+              <div class="legend-text">
+                <span class="legend-label">TN — True Negative:</span> Model correctly predicted negative.
+                Safe municipality classified as safe.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- ROC CURVE -->
+        <p class="section-label">ROC Curve & AUC</p>
+
+        <div class="roc-wrap">
+          <div class="roc-svg-wrap">
+            <svg width="260" height="240" viewBox="0 0 260 240" xmlns="http://www.w3.org/2000/svg">
+              <!-- Grid -->
+              <line x1="40" y1="10" x2="40" y2="200" stroke="#BAC8B1" stroke-width="1"/>
+              <line x1="40" y1="200" x2="240" y2="200" stroke="#BAC8B1" stroke-width="1"/>
+              <line x1="40" y1="10" x2="240" y2="200" stroke="#BAC8B1" stroke-width="1" stroke-dasharray="5,4"/>
+              <!-- Grid lines -->
+              <line x1="40" y1="100" x2="240" y2="100" stroke="#E6E6E6" stroke-width="1"/>
+              <line x1="140" y1="10" x2="140" y2="200" stroke="#E6E6E6" stroke-width="1"/>
+              <!-- ROC curve -->
+              <path d="M40,200 C40,120 80,40 140,30 C180,24 220,18 240,10"
+                    fill="none" stroke="#7B9669" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- AUC fill -->
+              <path d="M40,200 C40,120 80,40 140,30 C180,24 220,18 240,10 L240,200 Z"
+                    fill="rgba(123,150,105,0.12)"/>
+              <!-- Axes labels -->
+              <text x="130" y="220" text-anchor="middle" font-size="10" fill="#6C8480" font-family="DM Sans, sans-serif">False Positive Rate</text>
+              <text x="12" y="110" text-anchor="middle" font-size="10" fill="#6C8480" font-family="DM Sans, sans-serif" transform="rotate(-90,12,110)">True Positive Rate</text>
+              <!-- AUC label -->
+              <text x="170" y="80" font-size="11" fill="#404E3B" font-family="DM Sans, sans-serif" font-weight="600">AUC ≈ 0.91</text>
+              <!-- Corner labels -->
+              <text x="36" y="208" font-size="9" fill="#6C8480" font-family="DM Sans, sans-serif">(0,0)</text>
+              <text x="228" y="208" font-size="9" fill="#6C8480" font-family="DM Sans, sans-serif">(1,1)</text>
+              <text x="36" y="18" font-size="9" fill="#6C8480" font-family="DM Sans, sans-serif">(0,1)</text>
+            </svg>
+          </div>
+
+          <div class="roc-info">
+            <div class="context-box" style="margin-top:0;">
+              <strong style="font-family:var(--font-display);color:var(--forest);">What is the ROC Curve?</strong>
+              <p style="font-size:13px;color:var(--slate);margin-top:.5rem;line-height:1.75;">
+                The Receiver Operating Characteristic curve plots <strong>True Positive Rate</strong> (Recall)
+                against <strong>False Positive Rate</strong> across all classification thresholds.
+              </p>
+            </div>
+
+            <div class="scale-wrap">
+              <div class="section-label" style="margin-top:1rem;">AUC Interpretation</div>
+              <div class="scale-row">
+                <span>0.5 — Random</span>
+                <div class="s-bar-bg"><div class="s-bar" style="width:50%;background:var(--slate);"></div></div>
+                <span>Poor</span>
+              </div>
+              <div class="scale-row">
+                <span>0.7 — Acceptable</span>
+                <div class="s-bar-bg"><div class="s-bar" style="width:70%;"></div></div>
+                <span>Fair</span>
+              </div>
+              <div class="scale-row">
+                <span>0.8 — Good</span>
+                <div class="s-bar-bg"><div class="s-bar" style="width:80%;"></div></div>
+                <span>Good</span>
+              </div>
+              <div class="scale-row">
+                <span>0.9 — Excellent</span>
+                <div class="s-bar-bg"><div class="s-bar" style="width:90%;"></div></div>
+                <span>Great</span>
+              </div>
+              <div class="scale-row">
+                <span>1.0 — Perfect</span>
+                <div class="s-bar-bg"><div class="s-bar" style="width:100%;"></div></div>
+                <span>Ideal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ════════════════════════════════════════════════
+           TAB 2 · REGRESSION
+      ════════════════════════════════════════════════ -->
+      <div id="tab-regression" class="tab-panel">
+
+        <p class="section-label">Error Metrics</p>
+
+        <div class="metric-grid">
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <div class="metric-name">MAE</div>
+              <span class="metric-tag">Mean Absolute Error</span>
+            </div>
+            <div class="metric-formula">MAE = (1/n) × Σ |yᵢ − ŷᵢ|</div>
+            <div class="metric-desc">
+              Average absolute difference between predicted and actual values.
+              Easy to interpret (same units as the target). Not sensitive to outliers
+              — all errors are weighted equally regardless of magnitude.
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <div class="metric-name">MSE</div>
+              <span class="metric-tag">Mean Squared Error</span>
+            </div>
+            <div class="metric-formula">MSE = (1/n) × Σ (yᵢ − ŷᵢ)²</div>
+            <div class="metric-desc">
+              Squares the errors before averaging — penalizes large errors more heavily.
+              Differentiable, making it ideal for gradient-based optimization. Units are
+              squared, making interpretation harder than MAE.
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <div class="metric-name">RMSE</div>
+              <span class="metric-tag">Root Mean Squared Error</span>
+            </div>
+            <div class="metric-formula">RMSE = √[ (1/n) × Σ (yᵢ − ŷᵢ)² ]</div>
+            <div class="metric-desc">
+              Square root of MSE — restores original units for interpretability while
+              still penalizing large errors. Most commonly reported metric in regression
+              tasks alongside R².
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <div class="metric-name">R²</div>
+              <span class="metric-tag">Coefficient of Determination</span>
+            </div>
+            <div class="metric-formula">R² = 1 − (SS_res / SS_tot)</div>
+            <div class="metric-desc">
+              Proportion of variance in the target explained by the model.
+              R² = 1 means perfect fit; R² = 0 means the model is no better than
+              predicting the mean; negative R² means worse than the mean baseline.
+            </div>
+            <div class="metric-range">
+              <span>−∞</span>
+              <div class="range-bar"><div class="range-fill" style="width:100%"></div></div>
+              <span>1</span>
+            </div>
+          </div>
+
+        </div>
+
+        <hr class="divider">
+
+        <!-- COMPARISON TABLE -->
+        <p class="section-label">Metric Comparison</p>
+
+        <div class="datasets-wrap">
+          <table class="reg-compare">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Formula</th>
+                <th>Units</th>
+                <th>Outlier Sensitivity</th>
+                <th>Best for</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="metric-mono">MAE</span></td>
+                <td style="font-family:'Courier New',monospace;font-size:11.5px;">Σ|y−ŷ| / n</td>
+                <td>Same as target</td>
+                <td><span class="sensitivity-pill pill-low">Low</span></td>
+                <td>Robust evaluation, noisy data</td>
+              </tr>
+              <tr>
+                <td><span class="metric-mono">MSE</span></td>
+                <td style="font-family:'Courier New',monospace;font-size:11.5px;">Σ(y−ŷ)² / n</td>
+                <td>Squared units</td>
+                <td><span class="sensitivity-pill pill-high">High</span></td>
+                <td>Optimization, gradient descent</td>
+              </tr>
+              <tr>
+                <td><span class="metric-mono">RMSE</span></td>
+                <td style="font-family:'Courier New',monospace;font-size:11.5px;">√(MSE)</td>
+                <td>Same as target</td>
+                <td><span class="sensitivity-pill pill-high">High</span></td>
+                <td>Interpretable error with outlier penalty</td>
+              </tr>
+              <tr>
+                <td><span class="metric-mono">R²</span></td>
+                <td style="font-family:'Courier New',monospace;font-size:11.5px;">1 − SSres/SStot</td>
+                <td>Unitless [0–1]</td>
+                <td><span class="sensitivity-pill pill-med">Medium</span></td>
+                <td>Explaining variance, model comparison</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr class="divider">
+
+        <!-- VISUAL SCALE -->
+        <p class="section-label">R² Score — Quality Reference</p>
+
+        <div class="risk-section">
+          <div class="risk-row">
+            <span style="color:var(--pale);font-size:12px;">R² > 0.90</span>
+            <div class="risk-bar-bg"><div class="risk-bar bar-muy-alto" style="width:90%;"></div></div>
+            <span style="color:var(--pale);font-size:11px;text-align:right;">Excellent</span>
+          </div>
+          <div class="risk-row">
+            <span style="color:var(--pale);font-size:12px;">R² 0.75–0.90</span>
+            <div class="risk-bar-bg"><div class="risk-bar bar-alto" style="width:75%;"></div></div>
+            <span style="color:var(--pale);font-size:11px;text-align:right;">Good</span>
+          </div>
+          <div class="risk-row">
+            <span style="color:var(--pale);font-size:12px;">R² 0.50–0.75</span>
+            <div class="risk-bar-bg"><div class="risk-bar bar-medio" style="width:55%;"></div></div>
+            <span style="color:var(--pale);font-size:11px;text-align:right;">Acceptable</span>
+          </div>
+          <div class="risk-row">
+            <span style="color:var(--pale);font-size:12px;">R² < 0.50</span>
+            <div class="risk-bar-bg"><div class="risk-bar" style="width:30%;background:#6C6C6C;"></div></div>
+            <span style="color:var(--pale);font-size:11px;text-align:right;">Poor</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- NAV -->
+      <div class="nav-buttons">
+        <a href="/Kmeans/concepts" class="btn-secondary">
+          <i class="fa-solid fa-arrow-left"></i> K-Means Concepts
+        </a>
+        <a href="/Kmeans/application" class="btn-secondary">
+          <i class="fa-solid fa-play"></i> Run Model
+        </a>
+      </div>
+
+      <div class="foot-note" style="margin-top:2rem;">
+        <strong>Note:</strong> Classification metrics (Accuracy, Precision, Recall, F1) apply to supervised
+        classification models. For K-Means clustering, the primary evaluation metric is the
+        <strong>Silhouette Score</strong>, not these classification metrics directly.
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function switchTab(name, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
