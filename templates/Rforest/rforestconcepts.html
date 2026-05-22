@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <style>
-    /* ── Hero Banner ── */
     .rf-hero {
       background: linear-gradient(135deg, var(--accent, #2563eb) 0%, #1e3a5f 100%);
       border-radius: 16px;
@@ -67,7 +66,6 @@
       margin-bottom: 12px;
     }
 
-    /* ── Metric Row ── */
     .metric-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -98,8 +96,6 @@
       letter-spacing: 0.5px;
       font-weight: 600;
     }
-
-    /* ── Two-col layout ── */
     .rf-body {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -107,7 +103,7 @@
       margin-bottom: 24px;
     }
 
-    /* ── Timeline (How it works) ── */
+  
     .timeline { list-style: none; padding: 0; margin: 16px 0 0; position: relative; }
     .timeline::before {
       content: '';
@@ -136,7 +132,6 @@
     .tl-content h4 { margin: 0 0 4px; font-size: 0.9rem; font-weight: 700; }
     .tl-content p  { margin: 0; font-size: 0.85rem; color: var(--text-muted, #6b7280); line-height: 1.5; }
 
-    /* ── Feature importance bars ── */
     .feat-list { list-style: none; padding: 0; margin: 16px 0 0; }
     .feat-item { margin-bottom: 14px; }
     .feat-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
@@ -146,7 +141,6 @@
     .feat-fill { height: 100%; border-radius: 4px; background: var(--accent, #2563eb);
                  transition: width 0.8s ease; }
 
-    /* ── Params table ── */
     .param-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
     .param-table th {
       text-align: left; font-size: 0.75rem; text-transform: uppercase;
@@ -160,7 +154,6 @@
     .param-table tr:last-child td { border-bottom: none; }
     .param-val { font-weight: 700; color: var(--accent, #2563eb); }
 
-    /* ── Performance badges ── */
     .perf-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 16px; }
     .perf-card {
       border-radius: 10px;
@@ -180,10 +173,9 @@
     .perf-card.low  .perf-num { color: #ef4444; }
     .perf-sub { font-size: 0.72rem; color: var(--text-muted, #6b7280); margin-top: 2px; }
 
-    /* ── Full-width card ── */
     .rf-full { margin-bottom: 24px; }
 
-    /* ── Summary footer ── */
+
     .rf-summary {
       background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
       border: 1px solid #bae6fd;
@@ -210,7 +202,9 @@
       <li><a href="/businessunderstanding"><i class="fa-solid fa-briefcase"></i> 1. Business Understanding</a></li>
       <li><a href="/dataunderstanding"><i class="fa-solid fa-database"></i> 2. Data Understanding</a></li>
       <li><a href="/dataengineering"><i class="fa-solid fa-gears"></i> 3. Data Engineering</a></li>
-      <li class="active"><a href="/rforestconcept"><i class="fa-solid fa-tree"></i> 4. Model Engineering</a></li>
+      <li class="active"><a href="/modelengineering"><i class="fa-solid fa-tree"></i> 4. Model Engineering</a></li>
+      <li><a href="/modelevaluation"><i class="fa-solid fa-check"></i> 5. Model Evaluation</a></li>
+      <li><a href="/predictionsystem"><i class="fa-solid fa-tree"></i> 6. Prediction System</a></li>
     </ul>
   </nav>
 
@@ -246,10 +240,8 @@
       </div>
     </div>
 
-    <!-- Body grid -->
     <div class="rf-body">
 
-      <!-- How it works (timeline) -->
       <div class="card">
         <h2 class="section-title"><i class="fa-solid fa-gears"></i> How It Works</h2>
         <ul class="timeline">
@@ -284,7 +276,6 @@
         </ul>
       </div>
 
-      <!-- Feature importance bars -->
       <div class="card">
         <h2 class="section-title"><i class="fa-solid fa-ranking-star"></i> Feature Importance</h2>
         <ul class="feat-list">
@@ -319,7 +310,6 @@
         </ul>
       </div>
 
-      <!-- Hyperparameters -->
       <div class="card">
         <h2 class="section-title"><i class="fa-solid fa-sliders"></i> Hyperparameters</h2>
         <table class="param-table">
@@ -337,7 +327,6 @@
         </table>
       </div>
 
-      <!-- Class performance -->
       <div class="card">
         <h2 class="section-title"><i class="fa-solid fa-chart-line"></i> Performance by Class</h2>
         <div class="perf-grid">
@@ -364,7 +353,6 @@
 
     </div>
 
-    <!-- Summary -->
     <div class="rf-summary">
       <i class="fa-solid fa-circle-info"></i>
       <p>

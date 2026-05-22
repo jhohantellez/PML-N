@@ -100,6 +100,14 @@ def kmeans_application():
 def kmeans_assessment():
     return render_template("Kmeans/kmeans_assessment.html")
 
+@app.route("/modelengineering")
+def model_engineering():
+    return render_template("modelengineering.html")
+
+@app.route("/modelevaluation")
+def evaluation_model():
+    return render_template("evaluationmodel.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
