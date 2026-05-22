@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>K-Means Concepts</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .step-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 1rem;
+    }
+
+    .step-card {
+      background: var(--white);
+      border: 1.5px solid var(--pale);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .step-card:hover {
+      border-color: var(--sage);
+      box-shadow: 0 4px 18px rgba(123,150,105,.12);
+    }
+
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--pale);
+      line-height: 1;
+      margin-bottom: .4rem;
+    }
+
+    .step-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--forest);
+      margin-bottom: .4rem;
+    }
+
+    .step-body {
+      font-size: 12px;
+      color: var(--slate);
+      line-height: 1.7;
+    }
+
+    .formula-box {
+      background: var(--forest);
+      color: var(--pale);
+      border-radius: var(--radius-md);
+      padding: 1.4rem 1.6rem;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+
+    .formula-label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--sage);
+      margin-bottom: .5rem;
+    }
+
+    .pros-cons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 1rem;
+    }
+
+    .pros-box {
+      background: var(--mist);
+      border-left: 4px solid var(--sage);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 1.2rem;
+    }
+
+    .cons-box {
+      background: var(--mist);
+      border-left: 4px solid var(--slate);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 1.2rem;
+    }
+
+    .pc-title {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: .8rem;
+      color: var(--forest);
+    }
+
+    .pc-item {
+      font-size: 12.5px;
+      color: var(--slate);
+      line-height: 1.7;
+      padding: .3rem 0;
+      border-bottom: 1px solid var(--pale);
+    }
+
+    .pc-item:last-child { border-bottom: none; }
+
+    .visual-diagram {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      padding: 2rem;
+      background: var(--mist);
+      border-radius: var(--radius-lg);
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+
+    .cluster-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .6rem;
+    }
+
+    .cluster-dots {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+
+    .dot {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .centroid {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2.5px solid var(--forest);
+    }
+
+    .cluster-label {
+      font-size: 11px;
+      color: var(--slate);
+      text-align: center;
+    }
+
+    .arrow-icon {
+      font-size: 1.4rem;
+      color: var(--pale);
+    }
+
+    .param-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .param-table th {
+      background: var(--forest);
+      color: var(--pale);
+      padding: .8rem 1rem;
+      text-align: left;
+      font-weight: 500;
+      font-size: 11.5px;
+      letter-spacing: .05em;
+    }
+
+    .param-table td {
+      padding: .8rem 1rem;
+      border-bottom: 1px solid var(--mist);
+      color: var(--slate);
+      vertical-align: top;
+    }
+
+    .param-table tr:last-child td { border-bottom: none; }
+
+    .param-table tr:hover td { background: var(--mist); }
+
+    .param-name {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: var(--sage);
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      background: var(--forest);
+      color: var(--pale);
+      text-decoration: none;
+      padding: .8rem 1.6rem;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+      background: var(--sage);
+      color: var(--white);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      background: var(--white);
+      color: var(--forest);
+      text-decoration: none;
+      padding: .8rem 1.6rem;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      border: 1.5px solid var(--pale);
+      transition: var(--transition);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--sage);
+      color: var(--sage);
+    }
+
+    @media(max-width: 600px) {
+      .pros-cons-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <i class="fa-solid fa-leaf"></i>
+      ClimateML
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="/"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li><a href="/businessunderstanding"><i class="fa-solid fa-briefcase"></i> Business Understanding</a></li>
+      <li><a href="/dataunderstanding"><i class="fa-solid fa-database"></i> Data Understanding</a></li>
+      <li><a href="/dataengineering"><i class="fa-solid fa-gears"></i> Data Engineering</a></li>
+      <li><a href="/crispmlmethodology"><i class="fa-solid fa-diagram-project"></i> CRISP-ML</a></li>
+      <li class="active"><a href="/Kmeans/concepts"><i class="fa-solid fa-circle-nodes"></i> K-Means</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="page-content">
+    <div class="page">
+
+      <!-- HEADER -->
+      <header class="header">
+        <div class="header-left">
+          <span class="phase-tag">Modeling Phase</span>
+          <h1 class="page-title">K-Means<br>Clustering</h1>
+          <p class="page-subtitle">
+            Unsupervised machine learning algorithm that groups Colombian municipalities
+            by climate vulnerability patterns — without requiring labeled data.
+          </p>
+        </div>
+        <div class="project-pill">
+          <div class="section-label">Current Model</div>
+          <strong style="font-family:var(--font-display);font-size:1.1rem;color:var(--forest);">
+            K-Means++
+          </strong>
+          <div style="font-size:12px;color:var(--slate);margin-top:.3rem;">
+            Unsupervised · Distance-based · Centroid
+          </div>
+        </div>
+      </header>
+
+      <!-- SECTION: MODEL EXPLANATION -->
+      <p class="section-label">Model Explanation</p>
+
+      <div class="context-box">
+        <strong style="font-family:var(--font-display);font-size:1.05rem;color:var(--forest);">
+          What is K-Means?
+        </strong>
+        <p style="font-size:13.5px;color:var(--slate);margin-top:.6rem;line-height:1.8;">
+          K-Means is an <strong>unsupervised clustering algorithm</strong> that partitions a dataset into
+          <em>K</em> groups (clusters), where each observation belongs to the cluster whose centroid
+          is closest in Euclidean space. It iteratively refines cluster boundaries until convergence,
+          making it ideal for discovering hidden vulnerability patterns across municipalities.
+        </p>
+      </div>
+
+      <!-- VISUAL DIAGRAM -->
+      <div class="visual-diagram">
+        <div class="cluster-visual">
+          <div class="cluster-dots">
+            <div class="dot" style="background:#7B9669;top:10px;left:20px;"></div>
+            <div class="dot" style="background:#7B9669;top:25px;left:10px;"></div>
+            <div class="dot" style="background:#7B9669;top:30px;left:35px;"></div>
+            <div class="dot" style="background:#7B9669;top:45px;left:15px;"></div>
+            <div class="centroid" style="background:#7B9669;top:28px;left:20px;"></div>
+          </div>
+          <span class="cluster-label">Cluster A<br>Low vulnerability</span>
+        </div>
+        <div class="arrow-icon"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="cluster-visual">
+          <div class="cluster-dots">
+            <div class="dot" style="background:#BAC8B1;top:15px;left:30px;"></div>
+            <div class="dot" style="background:#BAC8B1;top:35px;left:50px;"></div>
+            <div class="dot" style="background:#BAC8B1;top:20px;left:55px;"></div>
+            <div class="dot" style="background:#BAC8B1;top:50px;left:40px;"></div>
+            <div class="centroid" style="background:#BAC8B1;top:28px;left:40px;"></div>
+          </div>
+          <span class="cluster-label">Cluster B<br>Medium vulnerability</span>
+        </div>
+        <div class="arrow-icon"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="cluster-visual">
+          <div class="cluster-dots">
+            <div class="dot" style="background:#6C8480;top:5px;left:50px;"></div>
+            <div class="dot" style="background:#6C8480;top:20px;left:65px;"></div>
+            <div class="dot" style="background:#6C8480;top:40px;left:55px;"></div>
+            <div class="dot" style="background:#6C8480;top:55px;left:65px;"></div>
+            <div class="centroid" style="background:#6C8480;top:28px;left:58px;"></div>
+          </div>
+          <span class="cluster-label">Cluster C<br>High vulnerability</span>
+        </div>
+      </div>
+
+      <!-- FORMULA -->
+      <p class="section-label">Objective Function</p>
+      <div class="formula-box">
+        <div class="formula-label">Minimize inertia (within-cluster sum of squares)</div>
+        J = Σ Σ ‖xᵢ − μₖ‖²
+        <br><br>
+        <span style="color:var(--sage);font-size:12px;">
+          where xᵢ = data point, μₖ = centroid of cluster k
+        </span>
+      </div>
+
+      <div class="pros-cons-grid">
+        <div class="pros-box">
+          <div class="pc-title"><i class="fa-solid fa-check" style="color:var(--sage);margin-right:6px;"></i> Advantages</div>
+          <div class="pc-item">Simple and computationally efficient</div>
+          <div class="pc-item">Scales well with large datasets</div>
+          <div class="pc-item">Works without labeled training data</div>
+          <div class="pc-item">Easy to interpret cluster centroids</div>
+          <div class="pc-item">K-Means++ improves initialization quality</div>
+        </div>
+        <div class="cons-box">
+          <div class="pc-title"><i class="fa-solid fa-triangle-exclamation" style="color:var(--slate);margin-right:6px;"></i> Limitations</div>
+          <div class="pc-item">Requires predefined number of clusters K</div>
+          <div class="pc-item">Sensitive to outliers and scale</div>
+          <div class="pc-item">Assumes spherical, equal-size clusters</div>
+          <div class="pc-item">May converge to local optima</div>
+          <div class="pc-item">Not suitable for categorical data directly</div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- SECTION: TRAINING PROCESS -->
+      <p class="section-label">Training Process</p>
+
+      <div class="step-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-title">Data Preparation</div>
+          <div class="step-body">
+            Load and normalize the UNGRD dataset. Apply StandardScaler so all
+            features contribute equally regardless of magnitude.
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-title">Train/Test Split</div>
+          <div class="step-body">
+            Divide data 80% / 20% using random_state=42 for reproducibility.
+            The model trains only on the training split.
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-title">K-Means++ Init</div>
+          <div class="step-body">
+            Centroids are seeded using K-Means++ strategy, spreading initial
+            points to improve convergence speed and quality.
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <div class="step-title">Iterative Assignment</div>
+          <div class="step-body">
+            Each data point is assigned to its nearest centroid. Centroids
+            are then recalculated as the mean of assigned points.
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">05</div>
+          <div class="step-title">Convergence</div>
+          <div class="step-body">
+            Repeat assignment and update steps until centroids stop moving
+            (max 300 iterations, 10 random initializations).
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">06</div>
+          <div class="step-title">Silhouette Validation</div>
+          <div class="step-body">
+            Evaluate cluster quality using Silhouette Score on training data.
+            Score ranges from -1 (poor) to +1 (excellent).
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- HYPERPARAMETERS TABLE -->
+      <p class="section-label">Hyperparameters</p>
+
+      <div class="datasets-wrap">
+        <table class="param-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Value</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="param-name">n_clusters</span></td>
+              <td>3 (default)</td>
+              <td>Number of vulnerability groups: Low, Medium, High</td>
+            </tr>
+            <tr>
+              <td><span class="param-name">init</span></td>
+              <td>k-means++</td>
+              <td>Smart centroid initialization to avoid bad local optima</td>
+            </tr>
+            <tr>
+              <td><span class="param-name">max_iter</span></td>
+              <td>300</td>
+              <td>Maximum iterations before forced convergence</td>
+            </tr>
+            <tr>
+              <td><span class="param-name">n_init</span></td>
+              <td>10</td>
+              <td>Number of independent runs; best result is kept</td>
+            </tr>
+            <tr>
+              <td><span class="param-name">random_state</span></td>
+              <td>42</td>
+              <td>Seed for reproducibility across executions</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="divider">
+
+      <!-- FEATURES -->
+      <p class="section-label">Input Features</p>
+
+      <div class="components-grid" style="margin-top:1rem;">
+        <div class="comp-card">
+          <div class="comp-title">MUNICIPALITY_EVENT_COUNT</div>
+          <div class="comp-body">Total emergency events registered per municipality — core vulnerability signal.</div>
+          <div class="tag-wrap"><span class="tag">Numeric</span><span class="tag">Key feature</span></div>
+        </div>
+        <div class="comp-card">
+          <div class="comp-title">EVENT_DIVERSITY</div>
+          <div class="comp-body">Variety of emergency types recorded, indicating multi-hazard exposure.</div>
+          <div class="tag-wrap"><span class="tag">Numeric</span></div>
+        </div>
+        <div class="comp-card">
+          <div class="comp-title">RAINY_SEASON</div>
+          <div class="comp-body">Binary flag indicating whether the event occurred during rainy season.</div>
+          <div class="tag-wrap"><span class="tag">Binary</span><span class="tag">Temporal</span></div>
+        </div>
+        <div class="comp-card">
+          <div class="comp-title">YEAR / MONTH</div>
+          <div class="comp-body">Temporal features to capture seasonal and annual vulnerability trends.</div>
+          <div class="tag-wrap"><span class="tag">Temporal</span></div>
+        </div>
+        <div class="comp-card">
+          <div class="comp-title">DEPARTMENT</div>
+          <div class="comp-body">Encoded administrative region to capture geographic vulnerability patterns.</div>
+          <div class="tag-wrap"><span class="tag">Encoded</span><span class="tag">Geographic</span></div>
+        </div>
+        <div class="comp-card">
+          <div class="comp-title">EVENT</div>
+          <div class="comp-body">Type of climate emergency event (flood, landslide, drought, etc.).</div>
+          <div class="tag-wrap"><span class="tag">Encoded</span><span class="tag">Categorical</span></div>
+        </div>
+      </div>
+
+      <!-- NAVIGATION -->
+      <div class="nav-buttons">
+        <a href="/Kmeans/application" class="btn-primary">
+          <i class="fa-solid fa-play"></i>
+          Run Model
+        </a>
+        <a href="/crispmlmethodology" class="btn-secondary">
+          <i class="fa-solid fa-arrow-left"></i>
+          CRISP-ML
+        </a>
+      </div>
+
+      <div class="foot-note" style="margin-top:2rem;">
+        <strong>Note:</strong> The K value is configurable via the application page URL parameter
+        <code style="background:var(--pale);padding:1px 5px;border-radius:4px;">?k=3</code>.
+        Experiment with different K values and compare Silhouette Scores to find the optimal clustering.
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

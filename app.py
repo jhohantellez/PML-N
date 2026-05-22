@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from ClimateClustering import ClimateKMeans
 import numpy as np
 from models import rf_model, rf_encoder, rf_le_dept, rf_le_event
 
@@ -12,6 +13,7 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return render_template('Home.html')
+
 #-------------------- PAGES --------------------
 
 @app.route("/businessunderstanding")
@@ -60,7 +62,44 @@ def rforest_application():
                            departments=departments,
                            events=events)
 
-if __name__ == "__main__":    app.run(debug=True)
+
+# -------------------- CLIMATE KMEANS --------------------
+
+@app.route("/Kmeans/concepts")
+def kmeans_concepts():
+    return render_template("Kmeans/conceptskmeans.html")
+
+@app.route("/Kmeans/application")
+def kmeans_application():
+
+    k = request.args.get("k", default=3, type=int)
+
+    info = ClimateKMeans(k)
+
+    return render_template(
+        "Kmeans/applicationkmeans.html",
+
+        summary=info["summary"],
+
+        centers=enumerate(info["centers"]),
+
+        results=info["results"],
+
+        graph=info["graph"],
+
+        score=info["score"],
+
+        inertia=info["inertia"],
+
+        elbow_graph=info["elbow_graph"],
+
+        k=k
+    )
+
+@app.route("/Kmeans/assessment")
+def kmeans_assessment():
+    return render_template("Kmeans/kmeans_assessment.html")
 
 
-
+if __name__ == "__main__":
+    app.run(debug=True)
