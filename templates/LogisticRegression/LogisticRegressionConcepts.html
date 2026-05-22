@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Vulnerability – Logistic Regression Concepts</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <style>
+
+    .accordion { display: flex; flex-direction: column; gap: 12px; }
+    .acc-item {
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: box-shadow .2s;
+    }
+    .acc-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,.06); }
+    .acc-header {
+      width: 100%;
+      background: var(--card-bg, #fff);
+      border: none;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-color, #1e293b);
+      transition: background .2s;
+    }
+    .acc-header:hover { background: var(--th-bg, #f8fafc); }
+    .acc-header .acc-icon { font-size: 16px; width: 20px; text-align: center; }
+    .acc-header .acc-title { flex: 1; }
+    .acc-header .acc-chevron {
+      font-size: 12px;
+      color: var(--text-muted, #94a3b8);
+      transition: transform .3s;
+    }
+    .acc-item.open .acc-chevron { transform: rotate(180deg); }
+    .acc-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .4s ease;
+      background: var(--card-bg, #fff);
+      border-top: 1px solid var(--border-color, #e2e8f0);
+    }
+    .acc-item.open .acc-body { max-height: 1200px; }
+    .acc-content { padding: 20px; font-size: 13px; line-height: 1.75; color: var(--text-color, #334155); }
+
+    /* Formula block */
+    .formula-block {
+      background: var(--th-bg, #f1f5f9);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #1e40af;
+      overflow-x: auto;
+      margin: 14px 0;
+      line-height: 1.8;
+    }
+    .formula-block .comment { color: #94a3b8; font-style: italic; }
+    .formula-block .kw      { color: #059669; font-weight: 700; }
+    .formula-block .val     { color: #dc2626; }
+
+    /* Sigmoid canvas */
+    #sigmoid-canvas { display: block; margin: 16px auto; max-width: 100%; }
+
+    /* Step timeline */
+    .timeline { display: flex; flex-direction: column; gap: 0; position: relative; padding-left: 32px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--border-color, #e2e8f0);
+    }
+    .tl-step { position: relative; padding: 0 0 20px 20px; }
+    .tl-step:last-child { padding-bottom: 0; }
+    .tl-dot {
+      position: absolute;
+      left: -32px;
+      top: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #3b82f6;
+      border: 3px solid var(--card-bg, #fff);
+      box-shadow: 0 0 0 2px #3b82f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: #fff;
+      font-weight: 700;
+    }
+    .tl-step-title { font-weight: 700; font-size: 13px; color: var(--text-color, #1e293b); margin-bottom: 4px; }
+    .tl-step-desc  { font-size: 12px; color: var(--text-muted, #64748b); line-height: 1.6; }
+
+    /* Hyperparameter table */
+    .hp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .hp-table th, .hp-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+      text-align: left;
+    }
+    .hp-table th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-muted, #64748b);
+      font-weight: 600;
+      background: var(--th-bg, #f8fafc);
+    }
+    .hp-table td:first-child { font-family: 'Courier New', monospace; font-weight: 700; color: #1d4ed8; font-size: 12px; }
+    .hp-table tr:last-child td { border-bottom: none; }
+    .badge-default {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Variable chips grid */
+    .var-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+    .var-chip {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color, #e2e8f0);
+      background: var(--th-bg, #f8fafc);
+      transition: border-color .2s, transform .2s;
+    }
+    .var-chip:hover { border-color: #93c5fd; transform: translateY(-2px); }
+    .var-chip .vc-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .vc-blue   { background: #3b82f6; }
+    .vc-green  { background: #22c55e; }
+    .vc-orange { background: #f59e0b; }
+    .vc-red    { background: #ef4444; }
+    .var-chip .vc-name { font-family: 'Courier New', monospace; font-size: 11px; font-weight: 700; color: #1e293b; }
+    .var-chip .vc-desc { font-size: 11px; color: var(--text-muted, #64748b); margin-top: 2px; line-height: 1.4; }
+
+    /* Pros / Cons grid */
+    .proscons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .pros-list, .cons-list { display: flex; flex-direction: column; gap: 8px; }
+    .pros-item, .cons-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .pros-item { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+    .cons-item { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+    .pros-item i { color: #22c55e; margin-top: 2px; flex-shrink: 0; }
+    .cons-item i { color: #ef4444; margin-top: 2px; flex-shrink: 0; }
+
+    /* Application context cards */
+    .app-cards { display: flex; flex-direction: column; gap: 12px; }
+    .app-card {
+      display: flex;
+      gap: 16px;
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color, #e2e8f0);
+      background: var(--th-bg, #f8fafc);
+      align-items: flex-start;
+      transition: border-color .2s;
+    }
+    .app-card:hover { border-color: #93c5fd; }
+    .app-card-icon {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .app-card-body .app-card-title { font-weight: 700; font-size: 13px; color: var(--text-color, #1e293b); margin-bottom: 4px; }
+    .app-card-body p { font-size: 12px; color: var(--text-muted, #64748b); line-height: 1.6; }
+
+    /* Class definition cards */
+    .class-grid { display: flex; flex-direction: column; gap: 10px; }
+    .class-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 16px;
+      border-radius: 8px;
+      border-left: 4px solid;
+    }
+    .class-row.low    { border-color: #22c55e; background: #f0fdf4; }
+    .class-row.medium { border-color: #f59e0b; background: #fffbeb; }
+    .class-row.high   { border-color: #ef4444; background: #fef2f2; }
+    .class-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .class-row.low    .class-dot { background: #22c55e; }
+    .class-row.medium .class-dot { background: #f59e0b; }
+    .class-row.high   .class-dot { background: #ef4444; }
+    .class-label { font-weight: 800; font-size: 13px; min-width: 58px; }
+    .class-row.low    .class-label { color: #15803d; }
+    .class-row.medium .class-label { color: #b45309; }
+    .class-row.high   .class-label { color: #b91c1c; }
+    .class-desc { font-size: 12px; color: var(--text-muted, #64748b); line-height: 1.5; }
+
+    /* Highlighted info box */
+    .info-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #1e40af;
+      line-height: 1.7;
+      margin: 14px 0;
+    }
+    .info-box strong { color: #1d4ed8; }
+
+    /* Concept tag */
+    .concept-tag {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 99px;
+      margin: 2px 3px;
+    }
+
+    /* Section intro text */
+    .section-intro {
+      font-size: 13px;
+      color: var(--text-muted, #64748b);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 640px) {
+      .proscons-grid { grid-template-columns: 1fr; }
+      .var-grid      { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <i class="fa-solid fa-cloud-sun-rain"></i> <span>ML</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="/"><i class="fa-solid fa-house"></i> Home Overview</a></li>
+      <li><a href="/crispmlmethodology"><i class="fa-solid fa-diagram-project"></i> CRISP-ML Methodology</a></li>
+      <li><a href="/businessunderstanding"><i class="fa-solid fa-briefcase"></i> 1. Business Understanding</a></li>
+      <li><a href="/dataunderstanding"><i class="fa-solid fa-database"></i> 2. Data Understanding</a></li>
+      <li><a href="/dataengineering"><i class="fa-solid fa-gears"></i> 3. Data Engineering</a></li>
+    </ul>
+  </nav>
+
+  <main class="page-content">
+
+    <!-- ── HEADER ── -->
+    <header class="header">
+      <div class="header-left">
+        <span class="phase-tag">CRISP-ML // Phase 4 · Theoretical Framework</span>
+        <h1 class="page-title">Logistic Regression Concepts</h1>
+        <p class="page-subtitle">
+          Theoretical foundation of the Logistic Regression algorithm — its formulation,
+          training strategy, hyperparameters, variables, and application to climate
+          vulnerability classification in Colombian municipalities.
+        </p>
+      </div>
+    </header>
+
+    <!-- ── CONCEPT TAGS STRIP ── -->
+    <section class="stats-grid" style="margin-bottom:24px;">
+      <div class="stat-card">
+        <i class="fa-solid fa-function icon-blue"></i>
+        <div>
+          <h3>Algorithm Type</h3>
+          <p>Supervised Classification</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-layer-group icon-green"></i>
+        <div>
+          <h3>Strategy</h3>
+          <p>Multinomial (3 Classes)</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-book-open icon-orange"></i>
+        <div>
+          <h3>Framework</h3>
+          <p>scikit-learn · lbfgs</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="main-grid">
+
+      <!-- ══ LEFT COLUMN ══ -->
+      <div class="left-column">
+
+        <!-- ── 1. WHAT IS LOGISTIC REGRESSION ── -->
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-circle-info"></i> What is Logistic Regression?</h2>
+          <p class="section-intro">
+            Despite its name, Logistic Regression is a <strong>classification</strong> algorithm, not a regression
+            one. It models the probability that a given observation belongs to a particular class by applying
+            a non-linear transformation — the <em>sigmoid</em> or <em>softmax</em> function — to a linear combination
+            of input features.
+          </p>
+
+          <div class="info-box">
+            <strong>Core idea:</strong> Find a set of weights β such that the linear combination
+            z = β₀ + β₁x₁ + β₂x₂ + … + βₙxₙ, when passed through the sigmoid function, produces
+            a probability value between 0 and 1 for each class.
+          </div>
+
+          <canvas id="sigmoid-canvas" width="440" height="200"></canvas>
+
+          <p style="font-size:12px;color:var(--text-muted,#64748b);text-align:center;margin-top:6px;line-height:1.6;">
+            The <strong>sigmoid</strong> σ(z) = 1 / (1 + e<sup>−z</sup>) maps any real value to (0, 1).
+            For multiple classes the <strong>softmax</strong> generalisation is applied.
+          </p>
+
+          <div class="formula-block">
+            <span class="comment"># Binary sigmoid</span><br>
+            σ(z) = <span class="kw">1</span> / (<span class="kw">1</span> + e<sup>−z</sup>)<br><br>
+            <span class="comment"># Multinomial softmax (k classes)</span><br>
+            P(y=k | x) = <span class="kw">exp</span>(β<sub>k</sub>·x) / Σⱼ <span class="kw">exp</span>(β<sub>j</sub>·x)<br><br>
+            <span class="comment"># Final decision</span><br>
+            ŷ = <span class="kw">argmax</span><sub>k</sub> P(y=k | x)<br><br>
+            <span class="comment"># Cross-entropy loss (minimised during training)</span><br>
+            L = −Σᵢ Σₖ yᵢₖ · <span class="kw">log</span>( P(yᵢ=k | xᵢ) )
+          </div>
+        </section>
+
+        <!-- ── 3. HYPERPARAMETERS ── -->
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-sliders"></i> Hyperparameters Used</h2>
+          <p class="section-intro">
+            The model was instantiated with the following configuration in scikit-learn.
+            Each parameter was chosen to match the scale and multiclass nature of the UNGRD dataset.
+          </p>
+
+          <table class="hp-table">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Value Used</th>
+                <th>Explanation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>solver</td>
+                <td><span class="badge-default">lbfgs</span></td>
+                <td>Limited-memory Broyden–Fletcher–Goldfarb–Shanno optimiser. Efficient for small-to-medium datasets and natively supports multinomial loss.</td>
+              </tr>
+              <tr>
+                <td>max_iter</td>
+                <td><span class="badge-default">1000</span></td>
+                <td>Maximum optimisation iterations. Increased from the default (100) to ensure convergence given 15 features and 990 samples.</td>
+              </tr>
+              <tr>
+                <td>C</td>
+                <td><span class="badge-default">1.0</span></td>
+                <td>Inverse of regularisation strength. C = 1.0 (default) applies moderate L2 regularisation, balancing bias and variance.</td>
+              </tr>
+              <tr>
+                <td>penalty</td>
+                <td><span class="badge-default">l2</span></td>
+                <td>L2 (Ridge) regularisation penalises large coefficients, improving generalisation to unseen municipalities.</td>
+              </tr>
+              <tr>
+                <td>random_state</td>
+                <td><span class="badge-default">42</span></td>
+                <td>Seed for reproducibility across training runs and experiments.</td>
+              </tr>
+              <tr>
+                <td>multi_class</td>
+                <td><span class="badge-default">auto</span></td>
+                <td>With <code>lbfgs</code>, scikit-learn automatically selects the multinomial strategy, computing a joint softmax probability over all 3 classes simultaneously.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="info-box" style="margin-top:16px;">
+            <strong>Regularisation note:</strong> The C parameter controls the trade-off between fitting
+            the training data and keeping model weights small. Lower C → stronger regularisation → simpler
+            model. Higher C → less regularisation → fits training data more closely but risks overfitting.
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ══ RIGHT COLUMN ══ -->
+      <div class="right-column">
+
+        <!-- ── 2. HOW THE MODEL WAS TRAINED ── -->
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-gears"></i> How the Model Was Trained</h2>
+          <p class="section-intro">
+            Training followed a standard supervised learning pipeline with careful
+            preprocessing to ensure feature comparability across municipalities of
+            very different sizes and disaster frequencies.
+          </p>
+
+          <div class="timeline">
+            <div class="tl-step">
+              <div class="tl-dot">1</div>
+              <div class="tl-step-title">Data Loading & Label Consolidation</div>
+              <div class="tl-step-desc">
+                The UNGRD Scaled dataset (10 802 records) was loaded. The original 4-level
+                label <em>Critical</em> was merged into <em>High</em> to produce exactly
+                3 balanced vulnerability classes: Low, Medium, High.
+              </div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot">2</div>
+              <div class="tl-step-title">Municipality-Level Aggregation</div>
+              <div class="tl-step-desc">
+                Records were grouped by <code>MUNICIPALITY</code> (990 unique municipalities).
+                Affectation columns were <em>summed</em>, index columns were <em>averaged</em>,
+                and count columns took the <em>maximum</em>. The target label was assigned
+                as the <em>dominant class</em> (mode) of all records for that municipality.
+              </div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot">3</div>
+              <div class="tl-step-title">Stratified Train / Test Split</div>
+              <div class="tl-step-desc">
+                Data split into 80% training (792 municipalities) and 20% test (198 municipalities)
+                using <code>stratify=y</code> to preserve class proportions in both sets.
+              </div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot">4</div>
+              <div class="tl-step-title">Feature Scaling</div>
+              <div class="tl-step-desc">
+                <code>StandardScaler</code> was fit <em>only</em> on training data (to avoid
+                data leakage) and applied to both train and test sets. This centres each feature
+                to mean = 0 and standard deviation = 1, which is critical for gradient-based
+                optimisers like lbfgs.
+              </div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot">5</div>
+              <div class="tl-step-title">Model Fitting</div>
+              <div class="tl-step-desc">
+                <code>LogisticRegression(solver="lbfgs", max_iter=1000)</code> was fitted on
+                the scaled training set. The lbfgs optimiser iteratively minimises the
+                multinomial cross-entropy loss, updating the 15 × 3 coefficient matrix.
+              </div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot">6</div>
+              <div class="tl-step-title">Evaluation & Export</div>
+              <div class="tl-step-desc">
+                Predictions on the test set were evaluated with accuracy, classification report
+                (precision/recall/F1 per class), confusion matrix, and ROC-AUC (One-vs-Rest).
+                Final predictions for all 990 municipalities were exported to CSV.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── CLASSES ── -->
+        <section class="card">
+          <h2 class="section-title"><i class="fa-solid fa-layer-group"></i> Vulnerability Classes</h2>
+          <p class="section-intro">The model classifies each municipality into one of three ordered levels.</p>
+          <div class="class-grid">
+            <div class="class-row low">
+              <div class="class-dot"></div>
+              <div class="class-label">Low</div>
+              <div class="class-desc">Few recorded events, low severity index, minimal human and infrastructure impact. Municipality has strong adaptive capacity.</div>
+            </div>
+            <div class="class-row medium">
+              <div class="class-dot"></div>
+              <div class="class-label">Medium</div>
+              <div class="class-desc">Moderate recurrence of climate events. Significant but manageable affectation. Requires prevention investment.</div>
+            </div>
+            <div class="class-row high">
+              <div class="class-dot"></div>
+              <div class="class-label">High</div>
+              <div class="class-desc">High severity and recurrence. Notable casualties, destroyed housing, critical sector damage. Demands prioritised intervention.</div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+    <!-- ── 4. VARIABLES (full width) ── -->
+    <section class="card" style="margin-top:0;">
+      <h2 class="section-title"><i class="fa-solid fa-table-list"></i> Input Variables (Features)</h2>
+      <p class="section-intro">
+        15 features were selected from the UNGRD Scaled dataset, grouped into four thematic categories.
+        All were standardised before model training.
+      </p>
+
+      <div class="var-grid">
+
+        <div class="var-chip">
+          <div class="vc-dot vc-red"></div>
+          <div>
+            <div class="vc-name">SEVERITY_INDEX</div>
+            <div class="vc-desc">Composite score of event intensity. Strongest predictor in the model.</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-red"></div>
+          <div>
+            <div class="vc-name">VULNERABILITY_INDEX</div>
+            <div class="vc-desc">Pre-computed composite vulnerability score aggregating multiple risk dimensions.</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-red"></div>
+          <div>
+            <div class="vc-name">AVG_SEVERITY_MUNICIPALITY</div>
+            <div class="vc-desc">Mean severity across all historical events recorded in the municipality.</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-blue"></div>
+          <div>
+            <div class="vc-name">PEOPLE</div>
+            <div class="vc-desc">Total number of persons affected by climate events (summed across records).</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-blue"></div>
+          <div>
+            <div class="vc-name">FAMILIES</div>
+            <div class="vc-desc">Number of families displaced or affected by disasters.</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-blue"></div>
+          <div>
+            <div class="vc-name">DECEASED</div>
+            <div class="vc-desc">Cumulative fatalities attributed to climate emergencies.</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-blue"></div>
+          <div>
+            <div class="vc-name">INJURED</div>
+            <div class="vc-desc">Number of persons injured during recorded events.</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-orange"></div>
+          <div>
+            <div class="vc-name">DAMAGED HOUSES</div>
+            <div class="vc-desc">Houses with partial structural damage — key housing impact indicator.</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-orange"></div>
+          <div>
+            <div class="vc-name">DESTROYED HOUSES</div>
+            <div class="vc-desc">Houses completely destroyed; reflects severity of physical impact.</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-orange"></div>
+          <div>
+            <div class="vc-name">DAMAGED ROADS</div>
+            <div class="vc-desc">Road infrastructure damage, affecting emergency response capacity.</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-orange"></div>
+          <div>
+            <div class="vc-name">EDUCATIONAL CENTERS</div>
+            <div class="vc-desc">Schools affected; indicates community-level social disruption.</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-orange"></div>
+          <div>
+            <div class="vc-name">HECTARES</div>
+            <div class="vc-desc">Agricultural land area affected — relevant for rural municipalities.</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-green"></div>
+          <div>
+            <div class="vc-name">MUNICIPALITY_EVENT_COUNT</div>
+            <div class="vc-desc">Total number of distinct climate events registered in the municipality.</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-green"></div>
+          <div>
+            <div class="vc-name">EVENT_DIVERSITY</div>
+            <div class="vc-desc">Number of different event types recorded (floods, landslides, drought, etc.).</div>
+          </div>
+        </div>
+
+        <div class="var-chip">
+          <div class="vc-dot vc-green"></div>
+          <div>
+            <div class="vc-name">RAINY_SEASON</div>
+            <div class="vc-desc">Proportion of events occurring during Colombia's rainy seasons (bimodal).</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:16px;font-size:12px;">
+        <span><span class="concept-tag" style="background:#fee2e2;color:#b91c1c;">● Index features</span> Composite risk scores (highest predictive weight)</span>
+        <span><span class="concept-tag" style="background:#dbeafe;color:#1d4ed8;">● Human impact</span> Persons, families, casualties</span>
+        <span><span class="concept-tag" style="background:#fef3c7;color:#b45309;">● Infrastructure</span> Housing, roads, schools, land</span>
+        <span><span class="concept-tag" style="background:#dcfce7;color:#15803d;">● Recurrence</span> Event frequency and diversity</span>
+      </div>
+    </section>
+
+    <!-- ── 5. ADVANTAGES & LIMITATIONS ── -->
+    <section class="card">
+      <h2 class="section-title"><i class="fa-solid fa-scale-balanced"></i> Advantages & Limitations</h2>
+      <p class="section-intro">
+        Logistic Regression offers strong interpretability and solid baseline performance,
+        but has inherent constraints when applied to complex, non-linear environmental data.
+      </p>
+
+      <div class="proscons-grid">
+
+        <div>
+          <h3 style="font-size:13px;font-weight:700;color:#15803d;margin-bottom:10px;"><i class="fa-solid fa-circle-check"></i> Advantages</h3>
+          <div class="pros-list">
+            <div class="pros-item">
+              <i class="fa-solid fa-check fa-xs"></i>
+              <span><strong>Interpretable coefficients:</strong> Each feature weight directly indicates direction and relative magnitude of its contribution to class probability.</span>
+            </div>
+            <div class="pros-item">
+              <i class="fa-solid fa-check fa-xs"></i>
+              <span><strong>Probabilistic output:</strong> Returns calibrated probabilities per class, enabling uncertainty quantification for each municipality's classification.</span>
+            </div>
+            <div class="pros-item">
+              <i class="fa-solid fa-check fa-xs"></i>
+              <span><strong>Computationally efficient:</strong> Fast training and inference — suitable for rapid re-training as new UNGRD records become available.</span>
+            </div>
+            <div class="pros-item">
+              <i class="fa-solid fa-check fa-xs"></i>
+              <span><strong>Robust baseline:</strong> Performs well when classes are approximately linearly separable, as observed with the vulnerability indices in this dataset (93.4% accuracy).</span>
+            </div>
+            <div class="pros-item">
+              <i class="fa-solid fa-check fa-xs"></i>
+              <span><strong>Regularisation built-in:</strong> L2 penalty prevents overfitting on the 990-municipality dataset without requiring external techniques.</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="font-size:13px;font-weight:700;color:#b91c1c;margin-bottom:10px;"><i class="fa-solid fa-circle-xmark"></i> Limitations</h3>
+          <div class="cons-list">
+            <div class="cons-item">
+              <i class="fa-solid fa-xmark fa-xs"></i>
+              <span><strong>Linear decision boundary:</strong> Assumes classes are linearly separable in feature space. Complex non-linear climate interactions may not be captured.</span>
+            </div>
+            <div class="cons-item">
+              <i class="fa-solid fa-xmark fa-xs"></i>
+              <span><strong>Medium class overlap:</strong> The <em>Medium</em> vulnerability class showed lower recall (74%), reflecting its transitional nature between Low and High.</span>
+            </div>
+            <div class="cons-item">
+              <i class="fa-solid fa-xmark fa-xs"></i>
+              <span><strong>Feature independence assumption:</strong> Correlated features (e.g. PEOPLE and FAMILIES) can distort coefficient magnitudes without prior decorrelation.</span>
+            </div>
+            <div class="cons-item">
+              <i class="fa-solid fa-xmark fa-xs"></i>
+              <span><strong>Static aggregation:</strong> Municipality-level aggregation loses temporal dynamics — seasonal vulnerability patterns and event trends are not modelled.</span>
+            </div>
+            <div class="cons-item">
+              <i class="fa-solid fa-xmark fa-xs"></i>
+              <span><strong>No spatial context:</strong> The model treats municipalities as independent observations, ignoring geographic proximity effects and regional spillovers.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── 6. APPLICATION TO COLOMBIA ── -->
+    <section class="card">
+      <h2 class="section-title"><i class="fa-solid fa-earth-americas"></i> Application to Climate Vulnerability in Colombia</h2>
+      <p class="section-intro">
+        Colombia's bimodal rainfall regime, Andean topography, and Pacific/Caribbean coastlines
+        create a uniquely complex climate risk landscape. The UNGRD dataset captures this diversity
+        across more than 1 000 municipalities spanning 32 departments.
+      </p>
+
+      <div class="app-cards">
+
+        <div class="app-card">
+          <div class="app-card-icon" style="background:#eff6ff;">🗺️</div>
+          <div class="app-card-body">
+            <div class="app-card-title">Territorial Risk Prioritisation</div>
+            <p>
+              By classifying municipalities into Low / Medium / High vulnerability, UNGRD and
+              territorial planning entities can allocate emergency prevention budgets proportionally
+              to actual risk exposure, reducing response times and improving pre-disaster preparedness.
+            </p>
+          </div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-card-icon" style="background:#f0fdf4;">🌧️</div>
+          <div class="app-card-body">
+            <div class="app-card-title">Rainy Season Readiness</div>
+            <p>
+              The <code>RAINY_SEASON</code> feature captures Colombia's bimodal precipitation
+              cycle (April–June, October–December). Municipalities showing high event concentration
+              during these windows receive elevated vulnerability scores, enabling seasonal pre-positioning
+              of humanitarian resources.
+            </p>
+          </div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-card-icon" style="background:#fffbeb;">🏘️</div>
+          <div class="app-card-body">
+            <div class="app-card-title">Housing & Infrastructure Vulnerability</div>
+            <p>
+              Variables like <code>DAMAGED HOUSES</code> and <code>DESTROYED HOUSES</code>
+              directly reflect housing stock fragility — a key indicator for municipalities
+              with precarious informal settlements in flood-prone or landslide-risk zones,
+              particularly in the Pacific and Andean regions.
+            </p>
+          </div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-card-icon" style="background:#fef2f2;">📡</div>
+          <div class="app-card-body">
+            <div class="app-card-title">Scalable Early Warning Integration</div>
+            <p>
+              The <code>pre_resultado()</code> prediction function can receive real-time
+              municipal indicators and return a vulnerability class + probability triplet,
+              making it suitable for integration with national early warning dashboards
+              or IDEAM climate monitoring systems.
+            </p>
+          </div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-card-icon" style="background:#f0f9ff;">📊</div>
+          <div class="app-card-body">
+            <div class="app-card-title">Decision Support for Public Policy</div>
+            <p>
+              The model's interpretable coefficients allow environmental authorities to
+              understand <em>which</em> risk factors drive high vulnerability in specific
+              regions — for instance, whether it is event frequency (Chocó) or infrastructure
+              damage (Cauca valleys) — enabling targeted policy instruments rather than
+              one-size-fits-all emergency plans.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer class="footer-note card">
+      <p>
+        <strong>Theoretical Summary:</strong> Logistic Regression provides a transparent, probabilistic,
+        and computationally efficient framework for municipal vulnerability classification. The multinomial
+        softmax formulation, combined with L2 regularisation and standardised UNGRD features, achieved
+        <strong>93.4% accuracy</strong> — validating the algorithm's suitability as a core modelling choice
+        within this CRISP-ML pipeline. Future phases may explore ensemble methods (Random Forest, XGBoost)
+        or spatial models (GWR) to address the current model's linearity and spatial independence constraints.
+      </p>
+    </footer>
+
+  </main>
+
+  <script>
+  /* ── ACCORDION ── */
+  document.querySelectorAll('.acc-header').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.acc-item');
+      item.classList.toggle('open');
+    });
+  });
+
+  /* ── SIGMOID CANVAS ── */
+  (function () {
+    const c   = document.getElementById('sigmoid-canvas');
+    if (!c) return;
+    const ctx = c.getContext('2d');
+    const W = c.width, H = c.height;
+    const PAD = 32;
+
+    function sigmoid(z) { return 1 / (1 + Math.exp(-z)); }
+
+    const getStyle = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+    // Background
+    ctx.clearRect(0, 0, W, H);
+
+    // Grid lines
+    ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+    [0, 0.25, 0.5, 0.75, 1].forEach(v => {
+      const py = PAD + (1 - v) * (H - 2 * PAD);
+      ctx.beginPath(); ctx.moveTo(PAD, py); ctx.lineTo(W - PAD, py); ctx.stroke();
+    });
+
+    // Threshold
+    ctx.setLineDash([5, 4]); ctx.strokeStyle = '#cbd5e1';
+    const yHalf = PAD + 0.5 * (H - 2 * PAD);
+    ctx.beginPath(); ctx.moveTo(PAD, yHalf); ctx.lineTo(W - PAD, yHalf); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Axes
+    ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(PAD, H - PAD); ctx.lineTo(W - PAD, H - PAD); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(PAD, PAD);     ctx.lineTo(PAD, H - PAD);     ctx.stroke();
+
+    // Labels
+    ctx.fillStyle = '#94a3b8'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('z',    W - 16, H - PAD + 4);
+    ctx.fillText('σ(z)', PAD,    PAD - 8);
+    ctx.fillText('1.0',  PAD - 14, PAD + 4);          ctx.textAlign = 'right';
+    ctx.fillText('0.5',  PAD - 6, yHalf + 4);
+    ctx.fillText('0.0',  PAD - 6, H - PAD + 4);        ctx.textAlign = 'center';
+
+    // Gradient fill under curve
+    const grad = ctx.createLinearGradient(0, PAD, 0, H - PAD);
+    grad.addColorStop(0, 'rgba(59,130,246,.18)');
+    grad.addColorStop(1, 'rgba(59,130,246,.00)');
+    ctx.beginPath();
+    for (let px = PAD; px <= W - PAD; px++) {
+      const z  = ((px - PAD) / (W - 2 * PAD)) * 12 - 6;
+      const py = PAD + (1 - sigmoid(z)) * (H - 2 * PAD);
+      px === PAD ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.lineTo(W - PAD, H - PAD); ctx.lineTo(PAD, H - PAD); ctx.closePath();
+    ctx.fillStyle = grad; ctx.fill();
+
+    // Sigmoid curve
+    ctx.beginPath(); ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 2.5;
+    for (let px = PAD; px <= W - PAD; px++) {
+      const z  = ((px - PAD) / (W - 2 * PAD)) * 12 - 6;
+      const py = PAD + (1 - sigmoid(z)) * (H - 2 * PAD);
+      px === PAD ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Decision point dot
+    const midX = PAD + 0.5 * (W - 2 * PAD);
+    ctx.beginPath();
+    ctx.arc(midX, yHalf, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#ef4444'; ctx.fill();
+    ctx.fillStyle = '#ef4444'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('decision threshold (0.5)', midX + 8, yHalf - 6);
+  })();
+  </script>
+
+</body>
+</html>

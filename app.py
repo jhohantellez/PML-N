@@ -8,13 +8,10 @@ print(rf_le_event.classes_)
 
 app = Flask(__name__)
 
-
-#-------------------- HOME --------------------
 @app.route("/")
 def home():
     return render_template('Home.html')
 
-#-------------------- PAGES --------------------
 
 @app.route("/businessunderstanding")
 def business_data():
@@ -100,6 +97,9 @@ def kmeans_application():
 def kmeans_assessment():
     return render_template("Kmeans/kmeans_assessment.html")
 
+@app.route('/LogisticRegressionConcepts', methods=['GET', 'POST'])
+def logistic_regression_concepts():
+    return render_template('LogisticRegression/LogisticRegressionConcepts.html')
 @app.route("/modelengineering")
 def model_engineering():
     return render_template("modelengineering.html")
@@ -108,6 +108,9 @@ def model_engineering():
 def evaluation_model():
     return render_template("evaluationmodel.html")
 
+@app.route('/LogisticRegressionApplication', methods=['GET', 'POST'])
+def logistic_regression_application():
+    return render_template('LogisticRegression/LogisticRegressionApplication.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
