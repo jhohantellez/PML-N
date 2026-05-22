@@ -18,6 +18,60 @@ def get_dataset():
     df_scaled.columns = df_scaled.columns.str.upper().str.strip()
     df_original.columns = df_original.columns.str.upper().str.strip()
 
+    # -------------------- TRANSLATE EVENTS --------------------
+    df_original['EVENT'] = (
+        df_original['EVENT']
+        .astype(str)
+        .str.upper()
+        .str.strip()
+    )
+
+    event_translation = {
+        'INUNDACIÓN': 'Flood',
+        'INUNDACION': 'Flood',
+        'INUNDACIÃ"N': 'Flood',
+        'FLOOD': 'Flood',
+        'DESLIZAMIENTO': 'Landslide',
+        'VENDAVAL': 'Windstorm',
+        'WINDSTORM': 'Windstorm',
+        'INCENDIO': 'Fire',
+        'VEGETATION COVER FIRE': 'Fire',
+        'SEQUÍA': 'Drought',
+        'DROUGHT': 'Drought',
+        'TORMENTA': 'Storm',
+        'TORMENTA ELECTRICA': 'Electrical Storm',
+        'AVENIDA TORRENCIAL': 'Flash Flood',
+        'CRECIENTE SUBITA': 'Flash Flood',
+        'CRECIENTE SÚBITA': 'Flash Flood',
+        'GRANIZADA': 'Hailstorm',
+        'SISMO': 'Earthquake',
+        'HELADA': 'Frost',
+        'LLUVIAS': 'Heavy Rain',
+        'QUEMA': 'Burning',
+        'ACCIDENTE TRANSPORTE MARITIMO O FLUVIAL': 'Maritime or River Transport Accident',
+        'ACCIDENTE TRANSPORTE MARÃ\x8dTIMO O FLUVIAL': 'Maritime or River Transport Accident',
+        'CICLON TROPICAL: DEPRESION/TORMENTA/HURACAN': 'Tropical Cyclone'
+    }
+
+    df_original['EVENT'] = df_original['EVENT'].replace(event_translation)
+
+    # -------------------- TRANSLATE DEPARTMENTS --------------------
+    df_original['DEPARTMENT'] = (
+        df_original['DEPARTMENT']
+        .astype(str)
+        .str.strip()
+        .str.title()
+    )
+
+    # -------------------- TRANSLATE MUNICIPALITIES --------------------
+    df_original['MUNICIPALITY'] = (
+        df_original['MUNICIPALITY']
+        .astype(str)
+        .str.strip()
+        .str.title()
+    )
+
+    # -------------------- FEATURES --------------------
     features = [
         "MUNICIPALITY_EVENT_COUNT",
         "EVENT_DIVERSITY",
@@ -30,7 +84,6 @@ def get_dataset():
 
     X = df_scaled[features].dropna()
 
-    # Sincronizar df_original con los índices válidos de X
     df_original = df_original.loc[X.index].reset_index(drop=True)
     X = X.reset_index(drop=True)
 
