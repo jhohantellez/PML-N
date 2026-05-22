@@ -109,11 +109,15 @@ df['VULNERABILITY_INDEX'] = (
     (df['EVENT_DIVERSITY'] * 0.2)
 )
 
-df['VULNERABILITY_LEVEL'] = pd.qcut(
-    df['VULNERABILITY_INDEX'],
-    q=4,
-    labels=['Low', 'Medium', 'High', 'Critical']
+p33 = df['SEVERITY_INDEX'].quantile(0.33)
+p66 = df['SEVERITY_INDEX'].quantile(0.66)
+
+df['VULNERABILITY_LEVEL'] = pd.cut(
+    df['SEVERITY_INDEX'],
+    bins=[-np.inf, p33, p66, np.inf],
+    labels=['Low', 'Medium', 'High']
 )
+
 
 encoder = LabelEncoder()
 
@@ -138,12 +142,5 @@ df_scaled[scale_cols] = scaler.fit_transform(
     df_scaled[scale_cols]
 )
 
-df = df.round(2)
-
-df_scaled = df_scaled.round(2)
-zero_percentage = (df == 0).mean() * 100
-print(
-    zero_percentage.sort_values(ascending=False)
-)
 df.to_excel('UNGRD_Cleaned.xlsx', index=False)
 df_scaled.to_excel('UNGRD_Scaled.xlsx', index=False)
