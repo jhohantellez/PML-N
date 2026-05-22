@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>K-Means Application</title>
+
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+
+    .k-selector {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--mist);
+      border: 1.5px solid var(--pale);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.4rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .k-selector label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--forest);
+    }
+
+    .k-input {
+      display: flex;
+      gap: .5rem;
+      align-items: center;
+    }
+
+    .k-input input[type="number"] {
+      width: 70px;
+      padding: .5rem .8rem;
+      border: 1.5px solid var(--pale);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--forest);
+      background: var(--white);
+    }
+
+    .k-input input[type="number"]:focus {
+      outline: none;
+      border-color: var(--sage);
+    }
+
+    .btn-run {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--forest);
+      color: var(--pale);
+      border: none;
+      padding: .6rem 1.4rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-run:hover {
+      background: var(--sage);
+      color: var(--white);
+    }
+
+    .score-banner {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: var(--forest);
+      border-radius: var(--radius-lg);
+      padding: 1.6rem 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .score-main {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      color: var(--pale);
+      line-height: 1;
+    }
+
+    .score-info {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .score-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--sage);
+      margin-bottom: .3rem;
+    }
+
+    .score-desc {
+      font-size: 13px;
+      color: var(--mist);
+      line-height: 1.6;
+    }
+
+    .score-scale {
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+      font-size: 11px;
+      color: var(--slate);
+    }
+
+    .scale-bar {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .scale-segment {
+      height: 6px;
+      border-radius: 3px;
+    }
+
+    .cluster-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .cluster-card {
+      background: var(--white);
+      border: 1.5px solid var(--pale);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .cluster-card:hover {
+      border-color: var(--sage);
+      box-shadow: 0 4px 18px rgba(123,150,105,.12);
+    }
+
+    .cluster-card-num {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      color: var(--forest);
+    }
+
+    .cluster-card-label {
+      font-size: 11px;
+      color: var(--slate);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .cluster-badge {
+      display: inline-block;
+      margin-top: .5rem;
+      font-size: 10.5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .pill-0 {
+      background: rgba(123,150,105,.15);
+      color: #4a6340;
+    }
+
+    .pill-1 {
+      background: rgba(186,200,177,.25);
+      color: #5a6e52;
+    }
+
+    .pill-2 {
+      background: rgba(108,132,128,.15);
+      color: #3d5854;
+    }
+
+    .pill-3 {
+      background: rgba(64,78,59,.12);
+      color: var(--forest);
+    }
+
+    .graph-wrap {
+      background: var(--mist);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .graph-wrap img {
+      max-width: 100%;
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    }
+
+    .centers-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+
+    .centers-table th {
+      background: var(--forest);
+      color: var(--pale);
+      padding: .7rem 1rem;
+      text-align: left;
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: .05em;
+    }
+
+    .centers-table td {
+      padding: .7rem 1rem;
+      border-bottom: 1px solid var(--mist);
+      color: var(--slate);
+      font-family: 'Courier New', monospace;
+      font-size: 11.5px;
+    }
+
+    .cluster-index {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--sage);
+    }
+
+    .results-scroll {
+      overflow-x: auto;
+      border: 1.5px solid var(--pale);
+      border-radius: var(--radius-lg);
+    }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      min-width: 600px;
+    }
+
+    .results-table th {
+      background: var(--forest);
+      color: var(--pale);
+      padding: .7rem 1rem;
+      text-align: left;
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: .06em;
+      white-space: nowrap;
+    }
+
+    .results-table td {
+      padding: .65rem 1rem;
+      border-bottom: 1px solid var(--mist);
+      color: var(--slate);
+    }
+
+    .cluster-pill {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      background: var(--white);
+      color: var(--forest);
+      text-decoration: none;
+      padding: .8rem 1.6rem;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      border: 1.5px solid var(--pale);
+      transition: var(--transition);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--sage);
+      color: var(--sage);
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <i class="fa-solid fa-leaf"></i>
+      ClimateML
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a href="/"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li><a href="/businessunderstanding"><i class="fa-solid fa-briefcase"></i> Business Understanding</a></li>
+      <li><a href="/dataunderstanding"><i class="fa-solid fa-database"></i> Data Understanding</a></li>
+      <li><a href="/dataengineering"><i class="fa-solid fa-gears"></i> Data Engineering</a></li>
+      <li><a href="/crispmlmethodology"><i class="fa-solid fa-diagram-project"></i> CRISP-ML</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-content">
+    <div class="page">
+
+      <header class="header">
+
+        <div class="header-left">
+
+          <span class="phase-tag">
+            Model Application
+          </span>
+
+          <h1 class="page-title">
+            Climate<br>Vulnerability Clusters
+          </h1>
+
+          <p class="page-subtitle">
+            K-Means model trained on UNGRD emergency data.
+            Municipalities are automatically grouped by their
+            climate vulnerability profile based on
+            {{ k }} clusters.
+          </p>
+
+        </div>
+
+        <div class="project-pill">
+
+          <div class="section-label">
+            Configuration
+          </div>
+
+          <strong style="
+            font-family:var(--font-display);
+            font-size:1.5rem;
+            color:var(--forest);
+          ">
+            K = {{ k }}
+          </strong>
+
+          <div style="
+            font-size:12px;
+            color:var(--slate);
+            margin-top:.2rem;
+          ">
+            Clusters · K-Means++
+          </div>
+
+        </div>
+
+      </header>
+
+      <!-- K SELECTOR -->
+
+      <div class="k-selector">
+
+        <label>
+          <i class="fa-solid fa-sliders"
+             style="margin-right:6px;color:var(--sage);"></i>
+
+          Try a different K value:
+        </label>
+
+        <div class="k-input">
+
+          <input type="number"
+                 id="k-val"
+                 min="2"
+                 max="10"
+                 value="{{ k }}">
+
+          <button class="btn-run"
+                  onclick="applyK()">
+
+            <i class="fa-solid fa-rotate"></i>
+            Recalculate
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- SILHOUETTE -->
+
+      <p class="section-label">
+        Validation · Silhouette Score
+      </p>
+
+      <div class="score-banner">
+
+        <div class="score-main">
+          {{ score }}
+        </div>
+
+        <div class="score-info">
+
+          <div class="score-label">
+            Silhouette Score
+          </div>
+
+          <div class="score-desc">
+            Measures how well each point fits its cluster
+            versus neighboring clusters.
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- METRICS -->
+
+      <hr class="divider">
+
+      <p class="section-label">
+        Model Evaluation Metrics
+      </p>
+
+      <div class="cluster-summary">
+
+        <div class="cluster-card">
+
+          <div class="cluster-card-num">
+            {{ score }}
+          </div>
+
+          <div class="cluster-card-label">
+            Silhouette Score
+          </div>
+
+          <div class="cluster-badge pill-0">
+            Cluster Quality
+          </div>
+
+        </div>
+
+        <div class="cluster-card">
+
+          <div class="cluster-card-num">
+            {{ "%.2f"|format(inertia) }}
+          </div>
+
+          <div class="cluster-card-label">
+            Inertia
+          </div>
+
+          <div class="cluster-badge pill-1">
+            Compactness
+          </div>
+
+        </div>
+
+        <div class="cluster-card">
+
+          <div class="cluster-card-num">
+            K = {{ k }}
+          </div>
+
+          <div class="cluster-card-label">
+            Selected Clusters
+          </div>
+
+          <div class="cluster-badge pill-2">
+            Elbow Method
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ELBOW METHOD -->
+
+      <hr class="divider">
+
+      <p class="section-label">
+        Elbow Method
+      </p>
+
+      <div class="graph-wrap">
+
+        <img
+          src="data:image/png;base64,{{ elbow_graph }}"
+          alt="Elbow Method Graph"
+        >
+
+      </div>
+
+      <div class="foot-note" style="margin-top:1rem;">
+
+        The Elbow Method evaluates the optimal number
+        of clusters by measuring inertia reduction
+        across different K values.
+
+      </div>
+
+      <!-- CLUSTER DISTRIBUTION -->
+
+      <hr class="divider">
+
+      <p class="section-label">
+        Cluster Distribution
+      </p>
+
+      <div class="cluster-summary">
+
+        {% for key, value in summary.items() %}
+
+        <div class="cluster-card">
+
+          <div class="cluster-card-num">
+            {{ value }}
+          </div>
+
+          <div class="cluster-card-label">
+            Records
+          </div>
+
+          <div class="cluster-badge pill-{{ key }}">
+            Cluster {{ key }}
+          </div>
+
+        </div>
+
+        {% endfor %}
+
+      </div>
+
+      <!-- CLUSTER GRAPH -->
+
+      <hr class="divider">
+
+      <p class="section-label">
+        Cluster Visualization
+      </p>
+
+      <div class="graph-wrap">
+
+        <img src="data:image/png;base64,{{ graph }}"
+             alt="K-Means Cluster Visualization">
+
+      </div>
+
+      <!-- CENTROIDS -->
+
+      <hr class="divider">
+
+      <p class="section-label">
+        Cluster Centroids
+      </p>
+
+      <div class="datasets-wrap">
+
+        <table class="centers-table">
+
+          <thead>
+
+            <tr>
+              <th>Cluster</th>
+              <th>Event Count</th>
+              <th>Diversity</th>
+              <th>Rainy Season</th>
+              <th>Year</th>
+              <th>Month</th>
+              <th>Department</th>
+              <th>Event</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            {% for i, center in centers %}
+
+            <tr>
+
+              <td>
+                <span class="cluster-index">
+                  {{ i }}
+                </span>
+              </td>
+
+              {% for val in center %}
+              <td>{{ "%.3f"|format(val) }}</td>
+              {% endfor %}
+
+            </tr>
+
+            {% endfor %}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <!-- RESULTS -->
+
+      <hr class="divider">
+
+      <p class="section-label">
+        Prediction Examples
+      </p>
+
+      <div class="results-scroll">
+
+        <table class="results-table">
+
+          <thead>
+
+            <tr>
+
+              {% for key in results[0].keys() %}
+              <th>{{ key }}</th>
+              {% endfor %}
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            {% for row in results %}
+
+            <tr>
+
+              {% for key, value in row.items() %}
+
+              {% if key == "CLUSTER" %}
+
+              <td>
+                <span class="cluster-pill pill-{{ value }}">
+                  Cluster {{ value }}
+                </span>
+              </td>
+
+              {% else %}
+
+              <td>{{ value }}</td>
+
+              {% endif %}
+
+              {% endfor %}
+
+            </tr>
+
+            {% endfor %}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <!-- NAV -->
+
+      <div class="nav-buttons">
+
+        <a href="/Kmeans/concepts"
+           class="btn-secondary">
+
+          <i class="fa-solid fa-book"></i>
+          Model Concepts
+
+        </a>
+
+        <a href="/"
+           class="btn-secondary">
+
+          <i class="fa-solid fa-house"></i>
+          Home
+
+        </a>
+
+      </div>
+
+      <!-- FOOT -->
+
+      <div class="foot-note" style="margin-top:2rem;">
+
+        <strong>Training split:</strong>
+        80% training — 20% testing
+
+        &nbsp;·&nbsp;
+
+        <strong>Scaler:</strong>
+        StandardScaler
+
+        &nbsp;·&nbsp;
+
+        <strong>Metrics:</strong>
+        Silhouette Score, Inertia, Elbow Method
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+
+    function applyK() {
+
+      const k = document.getElementById('k-val').value;
+
+      window.location.href =
+        `/Kmeans/application?k=${k}`;
+    }
+
+    document
+      .getElementById('k-val')
+      .addEventListener('keydown', function(e) {
+
+        if (e.key === 'Enter') {
+          applyK();
+        }
+
+      });
+
+  </script>
+
+</body>
+</html>
