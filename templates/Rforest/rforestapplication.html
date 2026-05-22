@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Forest — Application</title>
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <i class="fa-solid fa-cloud-sun-rain"></i>
+      <span>ML</span>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a href="/"><i class="fa-solid fa-house"></i> Home Overview</a></li>
+      <li><a href="/crispmlmethodology"><i class="fa-solid fa-diagram-project"></i> CRISP-ML Methodology</a></li>
+      <li><a href="/businessunderstanding"><i class="fa-solid fa-briefcase"></i> 1. Business Understanding</a></li>
+      <li><a href="/dataunderstanding"><i class="fa-solid fa-database"></i> 2. Data Understanding</a></li>
+      <li><a href="/dataengineering"><i class="fa-solid fa-gears"></i> 3. Data Engineering</a></li>
+      <li class="active"><a href="/modelengineering"><i class="fa-solid fa-tree"></i> 4. Model Engineering</a></li>
+      <li><a href="/modelevaluation"><i class="fa-solid fa-check"></i> 5. Model Evaluation</a></li>
+      <li><a href="/predictionsystem"><i class="fa-solid fa-tree"></i> 6. Prediction System</a></li>
+    </ul>
+  </nav>
+
+  <main class="page-content">
+
+    <div class="app-hero">
+
+      <div class="app-hero-icon">
+        <i class="fa-solid fa-chart-simple"></i>
+      </div>
+
+      <div class="app-hero-text">
+        <span class="app-badge">Training Results</span>
+
+        <h1>Random Forest — Application</h1>
+
+        <p>
+          Training results, validation metrics and live vulnerability
+          prediction for Colombian municipalities based on historical
+          disaster data.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="metric-row">
+
+      <div class="metric-box">
+        <span class="metric-value">82.83%</span>
+        <span class="metric-label">Accuracy</span>
+      </div>
+
+      <div class="metric-box">
+        <span class="metric-value">0.84</span>
+        <span class="metric-label">Weighted F1-Score</span>
+      </div>
+
+      <div class="metric-box">
+        <span class="metric-value">8,641</span>
+        <span class="metric-label">Training Samples</span>
+      </div>
+
+      <div class="metric-box">
+        <span class="metric-value">2,261</span>
+        <span class="metric-label">Test Samples</span>
+      </div>
+
+    </div>
+
+    <div class="split-row">
+
+      <div class="split-card">
+
+        <h2 class="section-title">
+          <i class="fa-solid fa-scissors" style="color:#059669"></i>
+          Dataset Split
+        </h2>
+
+        <p class="card-text">
+          80% training — 20% testing with stratified sampling to preserve
+          class distribution.
+        </p>
+
+        <div class="split-bar">
+          <div class="split-train">Train 80%</div>
+          <div class="split-test">Test 20%</div>
+        </div>
+
+        <div class="split-legend">
+          <span>
+            <span class="split-dot split-dot-train"></span>
+            Training: 8,641 rows
+          </span>
+
+          <span>
+            <span class="split-dot split-dot-test"></span>
+            Testing: 2,261 rows
+          </span>
+        </div>
+
+      </div>
+
+      <div class="split-card">
+
+        <h2 class="section-title">
+          <i class="fa-solid fa-table" style="color:#059669"></i>
+          Classification Report
+        </h2>
+
+        <table class="report-table">
+
+          <thead>
+            <tr>
+              <th>Class</th>
+              <th>Precision</th>
+              <th>Recall</th>
+              <th>F1-Score</th>
+              <th>Support</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td><strong>High</strong></td>
+              <td class="mid-val">0.73</td>
+              <td class="mid-val">0.84</td>
+              <td class="mid-val">0.78</td>
+              <td>691</td>
+            </tr>
+
+            <tr>
+              <td><strong>Low</strong></td>
+              <td class="good-val">0.98</td>
+              <td class="good-val">0.85</td>
+              <td class="good-val">0.91</td>
+              <td>1,371</td>
+            </tr>
+
+            <tr>
+              <td><strong>Medium</strong></td>
+              <td class="low-val">0.49</td>
+              <td class="mid-val">0.70</td>
+              <td class="mid-val">0.58</td>
+              <td>199</td>
+            </tr>
+
+            <tr>
+              <td><strong>Accuracy</strong></td>
+              <td colspan="3" class="good-val">0.83</td>
+              <td>2,261</td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <div class="charts-row">
+
+      <div class="chart-card">
+
+        <h2 class="section-title">
+          <i class="fa-solid fa-grid" style="color:#059669"></i>
+          Confusion Matrix
+        </h2>
+
+        <img src="{{ url_for('static', filename='confusion_matrix.png') }}"
+             alt="Confusion Matrix">
+
+        <p class="chart-caption">
+          Predicted vs actual vulnerability labels. Low and High classes
+          perform strongly while Medium shows more confusion due to class overlap.
+        </p>
+
+      </div>
+
+      <div class="chart-card">
+
+        <h2 class="section-title">
+          <i class="fa-solid fa-ranking-star" style="color:#059669"></i>
+          Feature Importance
+        </h2>
+
+        <img src="{{ url_for('static', filename='feature_importance.png') }}"
+             alt="Feature Importance">
+
+        <p class="chart-caption">
+          EVENT type is the dominant predictor (43%), confirming that the
+          nature of the disaster drives vulnerability. MONTH and YEAR
+          highlight the climate seasonality component.
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="charts-row">
+
+      <div class="chart-card full-width-card">
+
+        <h2 class="section-title">
+          <i class="fa-solid fa-chart-line" style="color:#059669"></i>
+          ROC Curve
+        </h2>
+
+        <img src="{{ url_for('static', filename='roc_curve.png') }}"
+             alt="ROC Curve">
+
+        <p class="chart-caption">
+          The ROC Curve evaluates the model’s ability to distinguish between
+          vulnerability classes. The Random Forest classifier achieved strong
+          AUC values for all categories, demonstrating excellent predictive
+          performance and reliable class separation.
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="predict-section">
+
+      <h2 class="section-title">
+        <i class="fa-solid fa-robot" style="color:#059669"></i>
+        Live Vulnerability Prediction
+      </h2>
+
+      <p class="card-text">
+        Fill in the municipality details below and the model will predict
+        its vulnerability level.
+      </p>
+
+      <form method="POST" action="/rforestapplication">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label>
+              <i class="fa-solid fa-map"></i>
+              Department
+            </label>
+
+            <select name="department" required>
+              {% for dept in departments %}
+                <option value="{{ dept }}">{{ dept }}</option>
+              {% endfor %}
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>
+              <i class="fa-solid fa-bolt"></i>
+              Event Type
+            </label>
+
+            <select name="event" required>
+              {% for event in events %}
+                <option value="{{ event }}">{{ event }}</option>
+              {% endfor %}
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>
+              <i class="fa-solid fa-calendar"></i>
+              Month
+            </label>
+
+            <select name="month" required>
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>
+              <i class="fa-solid fa-clock-rotate-left"></i>
+              Year
+            </label>
+
+            <input type="number"
+                   name="year"
+                   min="2019"
+                   max="2024"
+                   value="2022"
+                   required>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>
+              <i class="fa-solid fa-hashtag"></i>
+              Historical Event Count
+            </label>
+
+            <input type="number"
+                   name="event_count"
+                   min="1"
+                   max="500"
+                   value="10"
+                   required>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>
+              <i class="fa-solid fa-layer-group"></i>
+              Event Type Diversity
+            </label>
+
+            <input type="number"
+                   name="event_diversity"
+                   min="1"
+                   max="18"
+                   value="3"
+                   required>
+
+          </div>
+
+        </div>
+
+        <button type="submit" class="predict-btn">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          Predict Vulnerability
+        </button>
+
+      </form>
+
+      {% if prediction %}
+
+        {% if prediction == 'High' %}
+
+          <div class="result-high">
+
+            <div class="result-icon">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+
+            <div>
+              <div class="result-label">
+                Predicted Vulnerability Level
+              </div>
+
+              <div class="result-value">HIGH</div>
+
+              <div class="result-desc">
+                This municipality shows high vulnerability to climate-related
+                events. Immediate risk management measures are recommended.
+              </div>
+            </div>
+
+          </div>
+
+        {% elif prediction == 'Medium' %}
+
+          <div class="result-medium">
+
+            <div class="result-icon">
+              <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+
+            <div>
+              <div class="result-label">
+                Predicted Vulnerability Level
+              </div>
+
+              <div class="result-value">MEDIUM</div>
+
+              <div class="result-desc">
+                This municipality presents moderate vulnerability.
+                Preventive monitoring and contingency planning are advised.
+              </div>
+            </div>
+
+          </div>
+
+        {% else %}
+
+          <div class="result-low">
+
+            <div class="result-icon">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <div>
+              <div class="result-label">
+                Predicted Vulnerability Level
+              </div>
+
+              <div class="result-value">LOW</div>
+
+              <div class="result-desc">
+                This municipality shows low vulnerability based on historical
+                disaster patterns and seasonal indicators.
+              </div>
+            </div>
+
+          </div>
+
+        {% endif %}
+
+      {% endif %}
+
+    </div>
+
+    <div class="app-summary">
+
+      <i class="fa-solid fa-circle-check"></i>
+
+      <p>
+        <strong>Results Summary:</strong>
+
+        The Random Forest model achieved
+        <strong>82.83% accuracy</strong> on the test set.
+
+        The EVENT type was the strongest predictor (43%), followed by
+        MONTH (14%) and MUNICIPALITY_EVENT_COUNT (13%), confirming that
+        both the nature of the disaster and its temporal pattern are key
+        drivers of climate vulnerability.
+
+        Class imbalance in the Medium category was addressed with bootstrap
+        oversampling, raising its precision from 15% to 49%.
+      </p>
+
+    </div>
+
+  </main>
+
+</body>
+</html>
