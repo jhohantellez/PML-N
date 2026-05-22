@@ -112,5 +112,9 @@ def evaluation_model():
 def logistic_regression_application():
     return render_template('LogisticRegression/LogisticRegressionApplication.html')
 
+@app.route('/predictionsystem', methods=['GET', 'POST'])
+def prediction_system():
+    return render_template('predictionsystem.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
