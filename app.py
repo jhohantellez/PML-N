@@ -116,5 +116,9 @@ def logistic_regression_application():
 def rforest_application():
     return render_template('Rforest/rforestapplication.html')
 
+@app.route("/map")
+def map():
+    return render_template("vulnerability_map.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
